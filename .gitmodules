@@ -1,0 +1,9 @@
+[submodule "above"]
+	path = above
+	url = https://github.com/tarmoj/u-varyplayer-above.git
+[submodule "audiomelt"]
+	path = audiomelt
+	url = https://github.com/tarmoj/u-varyplayer-audiomelt.git
+[submodule "pointofview"]
+	path = pointofview
+	url = https://github.com/tarmoj/u-varyplayer-poinofview.git
