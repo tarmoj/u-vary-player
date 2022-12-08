@@ -1,0 +1,22 @@
+name: Publish
+on:
+  push:
+    branches:
+      - main # Edit this
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: deploy file
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: "v2404" # Edit this
+          port: 38307
+          server: "uuu.ee" # Edit this
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # Add this to secrets
+          local_path: "./*"
+          remote_path: "/home/v2404/public_html/varyplayer" # Edit this
