@@ -2,15 +2,31 @@
 <html lang="">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>U: Vary-player: Elis Hallik -  Above</title>
     <link rel="stylesheet" href="../uvp.css">
+    <script src="http://unpkg.com/tone"></script>
+    <script src="above.js"></script>
   </head>
   <body>
     <h1>U: Vary-player: Elis Hallik -  Above</h1>
 
-    Content comes here.
+    <div id="controls">
+      <button id="playButton" onclick="start()">Play</button>
+      <button id="pauseButton" onclick="pause()">Pause</button>
+      <button id="stopButton" onclick="stop()">Stop</button>
+      <span id="time">00:00</span>
+    </div>
+    <div id="infoDiv">You are listening to the piece for <span id="counterSpan">Nth</span>. time.</div>
+    <div id="selectionDiv">
+      <p>
+        Later: this menu will be shown after listening to the piece for X (2?) times. Shown for testing now.
+      </p>
+      <select id="versionSelect"></select>
+      <span id="loadingSpan"></span>
+    </div>
     <br>
     <a href="javascript:history.back()">Back</a>
-    </div>
+
   </body>
 </html>
