@@ -7,7 +7,7 @@
 let playbackData = null, pieceInfo = null, reverb=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
 let counter=0, loadedCounter=0, timerID=0, time = 0;
-let userTouched = false;
+let audioResumed = false;
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
 
 
@@ -15,7 +15,7 @@ const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Lef
 async function resumeAudio() {
     await Tone.getContext().resume();
     console.log("Audio resume");
-    userTouched = true;
+    audioResumed = true;
     //preparePlayback(pieceIndex, counter);
 }
 
@@ -158,6 +158,9 @@ const lastTimeReaction = () => {
 }
 
 const start = () => {
+    if (!audioResumed) {
+        resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
+    }
     console.log("Start");
     Tone.Transport.start("+0.1"); // is this necessary? propbaly no, () should do.
     const id =  Tone.Transport.scheduleRepeat(() => {
