@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <style>
+      header {
+        padding: 32px;
+        display: grid;
+        grid-template-columns: auto 4fr 1fr;
+        gap: 62px;
+        padding-bottom: 256px;
+      }
+      p {
+        opacity: 0.7;
+        padding-right: 64px !important;
+      }
+      @media (max-width: 800px) {
+        header {
+          grid-template-columns: 1fr;
+          gap: 16px;
+          padding-bottom: 32px;
+        }
+      }
+      header > div:nth-child(1) {
+        font-weight: 800;
+        font-size: 28px;
+      }
+      header p {
+        line-height: 28px;
+        font-size: 20px !important;
+      }
+      .Row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid rgba(255, 255, 255, 0.5);
+      }
+      @media (max-width: 800px) {
+        .Row {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+      }
+      .Row > div:nth-child(1) {
+        padding: 24px;
+      }
+      .Row p {
+        padding: 24px;
+      }
+      .Row h2,
+      .Row h3 {
+        font-size: 64px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 90%;
+      }
+      @media (max-width: 800px) {
+        .Row h2,
+        .Row h3 {
+          font-size: 48px;
+          line-height: 100%;
+          word-break: break-all;
+        }
+      }
+      .Row h2 {
+        opacity: 0.5;
+      }
+      .Row img {
+        opacity: 0.5;
+        transition: opacity 1000ms;
+        object-fit: contain;
+        width: 100%;
+      }
+      .Row img:hover {
+        opacity: 1;
+      }
+      @media (max-width: 800px) {
+        .up {
+          margin-top: -30vh;
+          z-index: -1;
+        }
+        .right {
+          margin-left: 20vh;
+          z-index: -1;
+        }
+      }
+      footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.5);
+        padding: 256px 32px 32px 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>U:</div>
+      <p>
+        Residentuu:r 2022 investigates the role and potential of musical
+        recordings at the present day, in the decay of CD culture, learn about
+        the needs of nowadays listener. Ensemble U: starts to work on the
+        concept of dynamic, interactive recording, that changes over time on
+        different listens.
+      </p>
+      <div></div>
+    </header>
+    <div class="Row">
+      <div>
+        <h2>Elis Hallik</h2>
+        <h3>Above</h3>
+      </div>
+      <img src="./elis.png" class="right" />
+      <p class="up">
+        "Above" is a randomly generated music art piece. It uses advanced
+        algorithms to generate unique compositions in real time, based on random
+        inputs. The music is composed of multiple layers of samples, which are
+        combined and manipulated in unpredictable ways. Through its use of
+        randomness and technology, "Above" offers a constantly evolving musical
+        experience.
+      </p>
+    </div>
+    <div class="Row">
+      <div>
+        <h2>Age Veeroos</h2>
+        <h3>Vaatenurk</h3>
+      </div>
+      <p>
+        "Vaatenurk" is an experimental generative 3D music installation. It uses
+        advanced algorithms to generate unique musical compositions in real
+        time, based on the movements of the audience. The music is spatialized,
+        creating a multi-dimensional audio experience. Through its use of
+        technology, "Above" offers a glimpse into the potential of generative
+        art.
+      </p>
+      <img src="./age.png" class="up right" />
+    </div>
+    <div class="Row">
+      <div>
+        <h2>Taivo Lints</h2>
+        <h3>AudioMelt</h3>
+      </div>
+      <img src="./tauno.png" class="right" />
+      <p class="up">
+        "AudioMelt" is a music installation that explores the relationship
+        between sound and visual art. It uses algorithms to convert a musical
+        score into a visual image, which is then modified and transformed. The
+        modified image is then sampled back into the music, creating a feedback
+        loop between the audio and visual elements. "AudioMelt" blurs the
+        boundaries between sound and image, creating a unique multimedia
+        experience.
+      </p>
+    </div>
+    <footer><p>Here comes the footer</p></footer>
+  </body>
+</html>
