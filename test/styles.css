@@ -34,3 +34,64 @@ img,
 svg {
   display: block;
 }
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  outline: none;
+  margin: 2em 0;
+  display: block;
+  background-color: #333;
+  background-image: linear-gradient(red, red);
+  background-repeat: no-repeat;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border: none;
+  border-radius: 1000px;
+  cursor: pointer;
+  background: white;
+  transition: all 200ms;
+  cursor: ew-resize;
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  height: 24px;
+  width: 24px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+/* .Progress input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 8px;
+  width: 4px;
+  border: none;
+  border-radius: 1000px;
+  cursor: pointer;
+  background: white;
+  transition: all 200ms;
+}
+
+.Progress input[type="range"]::-webkit-slider-thumb:hover {
+  height: 30px;
+} */
+
+progress[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+
+  height: 20px;
+  accent-color: red;
+}
