@@ -13,6 +13,9 @@ html {
 *:before,
 *:after {
   box-sizing: inherit;
+  -webkit-backface-visibility: hidden;
+  -backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   background-color: #111;
@@ -45,9 +48,11 @@ input[type="range"] {
   margin: 2em 0;
   display: block;
   background-color: #333;
-  background-image: linear-gradient(#444, #444);
+  background-image: linear-gradient(var(--accent), var(--accent));
   background-repeat: no-repeat;
   border-radius: 2px;
+  background-size: 0% 100%;
+  width: 25vw;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -77,21 +82,25 @@ input[type="range"]::-webkit-slider-runnable-track {
   background: transparent;
 }
 
-/* .Progress input[type="range"]::-webkit-slider-thumb {
+input[type="range"].progress::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 8px;
+  height: 4px;
   width: 4px;
   border: none;
   border-radius: 1000px;
-  cursor: pointer;
-  background: white;
+  cursor: ew-resize;
   transition: all 200ms;
 }
 
-.Progress input[type="range"]::-webkit-slider-thumb:hover {
-  height: 30px;
-} */
+input[type="range"].progress::-webkit-slider-thumb:empty {
+  display: none;
+}
 
+@media (max-width: 800px) {
+  input[type="range"] {
+    width: 75vw;
+  }
+}
 progress {
   /* Reset the default appearance */
   -webkit-appearance: none;
@@ -99,6 +108,7 @@ progress {
   height: 4px;
   border-radius: 2px;
   background-color: var(--accent);
+  width: 25vw;
 }
 progress::-webkit-progress-bar {
   background-color: #333;
@@ -108,4 +118,91 @@ progress::-webkit-progress-value {
   background-color: var(--accent);
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
+}
+@media (max-width: 800px) {
+  progress {
+    width: 75vw;
+  }
+}
+.Row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+@media (max-width: 800px) {
+  .Row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+.Row > div:nth-child(1) {
+  padding: 24px;
+}
+.Row p {
+  padding: 24px;
+}
+.Row h2,
+.Row h3 {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 90%;
+}
+@media (max-width: 800px) {
+  .Row h2,
+  .Row h3 {
+    font-size: 48px;
+    line-height: 100%;
+    word-break: break-all;
+  }
+}
+.Row h2 {
+  opacity: 0.5;
+}
+.Row img {
+  opacity: 0.5;
+  transition: opacity 1000ms;
+  object-fit: contain;
+  width: 100%;
+}
+.Row img:hover {
+  opacity: 1;
+}
+.up {
+  margin-top: -20vh;
+  z-index: -1;
+}
+.down {
+  margin-top: -20vh;
+  z-index: -1;
+}
+.right {
+  margin-left: 10vh;
+  z-index: -1;
+}
+@media (max-width: 800px) {
+  .up-mobile {
+    margin-top: -20vh;
+    z-index: -1;
+  }
+  .down-mobile {
+    margin-top: -20vh;
+    z-index: -1;
+  }
+  .right-mobile {
+    margin-left: 10vh;
+    z-index: -1;
+  }
+}
+
+.text {
+  max-width: 60ch;
+  margin: 0 auto;
+  line-height: 150%;
+  opacity: 0.4;
+  transition: all 1000ms;
+}
+.text:hover {
+  opacity: 1;
 }

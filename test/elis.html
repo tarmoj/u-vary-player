@@ -32,10 +32,76 @@
         height: 64px;
         padding: 20px;
       }
+      .Nav {
+        padding: 0 32px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .Row > div {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+      }
+      @media (max-width: 800px) {
+        .Row > div {
+          display: block;
+          text-align: center;
+        }
+      }
+      .Grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 16px;
+      }
+      .Grid button {
+        all: unset;
+        cursor: pointer;
+        border: 2px solid white;
+        aspect-ratio: 2 / 1;
+        padding: 8px;
+        border-radius: 4px;
+        display: flex;
+        opacity: 0.7;
+        transition: 300ms;
+      }
+      .Grid button:hover {
+        opacity: 1;
+      }
+      @media (max-width: 800px) {
+        .Grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+      }
     </style>
   </head>
   <body>
-    <div style="display: flex; justify-content: center; padding: 32px">
+    <nav class="Nav">
+      <img
+        style="filter: invert(); width: 24px; height: 24px"
+        src="https://api.iconify.design/cil:arrow-circle-left.svg"
+      />
+    </nav>
+    <div class="Row" style="display: block; border-top: none">
+      <div>
+        <h2>Elis Hallik</h2>
+        <h3>Above</h3>
+      </div>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 32px;
+        gap: 32px;
+        align-items: center;
+      "
+    >
       <button id="play" class="Play">
         <img id="paused" src="https://api.iconify.design/cil:media-play.svg" />
         <img
@@ -44,20 +110,50 @@
           src="https://api.iconify.design/cil:media-pause.svg"
         />
       </button>
-    </div>
-    <div>
-      <input type="range" max="100" />
-    </div>
-    <div>
-      <progress id="progress" max="1000"></progress>
+
+      <progress id="progress" value="0" max="1000" step="any"></progress>
+      <input
+        id="progress2"
+        type="range"
+        value="0"
+        max="1000"
+        step="any"
+        class="progress"
+      />
+
       <div id="hms">00:00:00</div>
       <audio
         id="audio"
         src="http://www.hochmuth.com/mp3/Tchaikovsky_Rococo_Var_orch.mp3"
         loop
         playsinline
-      />
+      ></audio>
+
+      <p></p>
+
+      <div class="Grid">
+        <button>Strings + Synth</button>
+        <button>Quartet 1</button>
+        <button>Duo Vlc - Vibr</button>
+        <button>Duo Flc + Vlc - Vibr</button>
+        <button>Trio Vlc - Vibr - Synth</button>
+        <button>Quintet 1</button>
+        <button>Sextet 1</button>
+      </div>
+
+      <br />
+
+      <div class="text">
+        "Above" is a randomly generated music art piece. It uses advanced
+        algorithms to generate unique compositions in real time, based on random
+        inputs. The music is composed of multiple layers of samples, which are
+        combined and manipulated in unpredictable ways. Through its use of
+        randomness and technology, "Above" offers a constantly evolving musical
+        experience.
+      </div>
+      <!-- <img src="./elis.png" /> -->
     </div>
+
     <script>
       function secondsToHms(seconds) {
         var h = Math.floor(seconds / 3600);
@@ -75,12 +171,8 @@
 
       const audio = document.getElementById("audio");
       const progress = document.getElementById("progress");
+      const progress2 = document.getElementById("progress2");
       const hms = document.getElementById("hms");
-
-      audio.addEventListener("timeupdate", () => {
-        progress.value = audio.currentTime;
-        hms.innerHTML = secondsToHms(audio.currentTime);
-      });
 
       let playing = false;
 
@@ -88,14 +180,26 @@
         if (playing) {
           document.getElementById("playing").style.display = "none";
           document.getElementById("paused").style.display = "block";
-          playing = false;
           audio.pause();
+          playing = false;
         } else {
           document.getElementById("playing").style.display = "block";
           document.getElementById("paused").style.display = "none";
-          playing = true;
           audio.play();
+          playing = true;
         }
+      });
+
+      audio.addEventListener("timeupdate", () => {
+        progress.value = audio.currentTime;
+        progress2.value = audio.currentTime;
+        progress2.style.backgroundSize = `${audio.currentTime / 10}% 100%`;
+        hms.innerHTML = secondsToHms(audio.currentTime);
+      });
+
+      progress2.addEventListener("input", (e) => {
+        const value = parseFloat(e.target.value);
+        audio.currentTime = value;
       });
     </script>
   </body>
