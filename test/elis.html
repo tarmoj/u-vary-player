@@ -33,7 +33,6 @@
         padding: 20px;
       }
     </style>
-    <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
   </head>
   <body>
     <div style="display: flex; justify-content: center; padding: 32px">
@@ -50,8 +49,14 @@
       <input type="range" max="100" />
     </div>
     <div>
-      <progress id="progress" max="100"></progress>
+      <progress id="progress" max="1000"></progress>
       <div id="hms">00:00:00</div>
+      <audio
+        id="audio"
+        src="http://www.hochmuth.com/mp3/Tchaikovsky_Rococo_Var_orch.mp3"
+        loop
+        playsinline
+      />
     </div>
     <script>
       function secondsToHms(seconds) {
@@ -68,6 +73,15 @@
         );
       }
 
+      const audio = document.getElementById("audio");
+      const progress = document.getElementById("progress");
+      const hms = document.getElementById("hms");
+
+      audio.addEventListener("timeupdate", () => {
+        progress.value = audio.currentTime;
+        hms.innerHTML = secondsToHms(audio.currentTime);
+      });
+
       let playing = false;
 
       document.getElementById("play").addEventListener("click", () => {
@@ -75,29 +89,13 @@
           document.getElementById("playing").style.display = "none";
           document.getElementById("paused").style.display = "block";
           playing = false;
-          console.log("paused");
+          audio.pause();
         } else {
           document.getElementById("playing").style.display = "block";
           document.getElementById("paused").style.display = "none";
           playing = true;
-          console.log("playing");
+          audio.play();
         }
-
-        const progress = document.getElementById("progress");
-        const hms = document.getElementById("hms");
-
-        let currentProgress = 0;
-
-        progress.value = currentProgress;
-        setInterval(() => {
-          if (playing) {
-            currentProgress++;
-            progress.value = currentProgress;
-            hms.innerHTML = secondsToHms(currentProgress);
-          } else {
-            progress.value = currentProgress;
-          }
-        }, 1000);
       });
     </script>
   </body>
