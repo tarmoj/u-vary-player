@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <!-- TODO: Hide this -->
+      <!-- TODO: disable the controls -->
       <audio
         id="audio"
         src="./sounds/vaatenurk-I-demo.mp3"
@@ -29,34 +29,23 @@
         style="width: 100%"
       ></audio>
 
-      <!--    Maybe rather use reusable code (similar in Above) like createControlRow() -->
-      <button id="play" class="Play">
-        <img id="paused" src="https://api.iconify.design/cil:media-play.svg" />
-        <img
-          id="playing"
-          style="display: none"
-          src="https://api.iconify.design/cil:media-pause.svg"
-        />
+      <button id="playButton" class="PlayPause">
+        <img src="https://api.iconify.design/cil:media-play.svg" />
       </button>
 
-      <div id="stopping" class="Stop" style="opacity: 0.2">
+      <button id="pauseButton" class="PlayPause">
+        <img src="https://api.iconify.design/cil:media-pause.svg" />
+      </button>
+
+      <div id="stopButton" class="Stop">
         <img src="https://api.iconify.design/cil:media-stop.svg" />
       </div>
 
-      <progress id="progress" value="0" max="1000" step="any"></progress>
+      <progress id="progress" value="0" step="any"></progress>
 
-      <div id="hms">Loading...</div>
+      <div id="timestamp"></div>
 
       <div id="current"></div>
-
-      <span id="loadingSpan"></span>
-
-      <div id="dialogDiv" style="visibility: hidden">
-        This was the first part.<br />
-        Are you sure you want to continue listening?<br />
-        <button onclick="reaction(true)">Yes</button>
-        <button onclick="reaction(false)">No</button>
-      </div>
     </div>
     <script src="./pointofview.js"></script>
   </body>

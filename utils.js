@@ -1,4 +1,4 @@
-function secondsToHms(seconds, hours = false) {
+function secondsToTimestamp(seconds, hours = false) {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor((seconds % 3600) % 60);

@@ -104,7 +104,7 @@
 
       audio.addEventListener("timeupdate", () => {
         progress.value = audio.currentTime;
-        hms.innerHTML = secondsToHms(audio.currentTime);
+        hms.innerHTML = secondsToTimestamp(audio.currentTime);
       });
 
       // Add volume control

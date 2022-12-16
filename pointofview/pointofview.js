@@ -1,22 +1,61 @@
 const audio = document.getElementById("audio");
-const play = document.getElementById("play");
-const playing = document.getElementById("playing");
-const paused = document.getElementById("paused");
-const stopping = document.getElementById("stopping");
+
+const playButton = document.getElementById("playButton");
+const pauseButton = document.getElementById("pauseButton");
+const stopButton = document.getElementById("stopButton");
+
 const progress = document.getElementById("progress");
-const hms = document.getElementById("hms");
+const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
 let isLoaded = false;
-let isPlaying = false;
-
 let currentPart = 1;
 
-// Audio events
+function init() {
+  pauseButton.style.display = "none";
+  stopButton.style.opacity = 0.2;
+  timestamp.innerHTML = "Loading...";
+  currentPart.innerHTML = "";
+}
+
+function start() {
+  if (isLoaded) {
+    // TODO: evey time "Play" is pressed, pick a new version (audio.src="" probably)?
+    audio.play();
+    //  isPlaying = true;
+    playButton.style.display = "none";
+    pauseButton.style.display = "block";
+    stopButton.style.opacity = 1;
+  }
+}
+
+function pause() {
+  audio.pause();
+  //  isPlaying = false;
+  playButton.style.display = "block";
+  pauseButton.style.display = "none";
+}
+
+function stop() {
+  pause();
+  audio.currentTime = 0;
+}
+
+// Assign init event
+
+window.addEventListener("load", init);
+
+// Assing transport buttons events
+
+playButton.addEventListener("click", start);
+pauseButton.addEventListener("click", pause);
+stopButton.addEventListener("click", stop);
+
+// Assign audio events
 
 audio.addEventListener("canplaythrough", () => {
   isLoaded = true;
-  hms.innerHTML = "00:00";
+  timestamp.innerHTML = "00:00";
   current.innerHTML = `Playing part ${currentPart}`;
 });
 
@@ -26,7 +65,7 @@ audio.addEventListener("loadedmetadata", () => {
 
 audio.addEventListener("timeupdate", () => {
   progress.value = audio.currentTime;
-  hms.innerHTML = secondsToHms(audio.currentTime);
+  timestamp.innerHTML = secondsToTimestamp(audio.currentTime);
 });
 
 audio.addEventListener("ended", () => {
@@ -41,38 +80,4 @@ audio.addEventListener("ended", () => {
     current.innerHTML = `Playing part ${currentPart}`;
   }
   // TODO: some kind or response
-});
-
-// Transport controls events
-
-play.addEventListener("click", () => {
-  if (isPlaying) {
-    audio.pause();
-    isPlaying = false;
-    // Styling
-    playing.style.display = "none";
-    paused.style.display = "block";
-    stopping.style.opacity = 0.3;
-  } else if (!isPlaying && isLoaded) {
-    // TODO: evey time "Play" is pressed, pick a new version (audio.src="" probably)?
-    audio.play();
-    isPlaying = true;
-    // Styling
-    playing.style.display = "block";
-    paused.style.display = "none";
-    stopping.style.opacity = 1;
-  } else {
-  }
-});
-
-stopping.addEventListener("click", () => {
-  if (isPlaying) {
-    audio.pause();
-    audio.currentTime = 0;
-    isPlaying = false;
-    // Styling
-    playing.style.display = "none";
-    paused.style.display = "block";
-    stopping.style.opacity = 0.3;
-  }
 });
