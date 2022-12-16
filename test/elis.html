@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <nav class="Nav">
+      <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      <div class="Volume">
+        <input id="volume" type="range" max="1" step="any" style="opacity: 0" />
+        <button id="volumetoggle">
+          <img src="https://api.iconify.design/system-uicons:volume-0.svg" />
+        </button>
+      </div>
+    </nav>
+
+    <div class="Title" style="display: block; border-top: none">
+      <div>
+        <h2>Elis Hallik</h2>
+        <h3>Above</h3>
+      </div>
+    </div>
+
+    <div class="Content">
+      <button id="play" class="Play">
+        <img id="paused" src="https://api.iconify.design/cil:media-play.svg" />
+        <img
+          id="playing"
+          style="display: none"
+          src="https://api.iconify.design/cil:media-pause.svg"
+        />
+      </button>
+
+      <div id="stop" class="Stop" style="opacity: 0.2">
+        <img src="https://api.iconify.design/cil:media-stop.svg" />
+      </div>
+
+      <progress id="progress" value="0" max="1000" step="any"></progress>
+
+      <div id="hms">00:00:00</div>
+
+      <audio
+        id="audio"
+        src="http://www.hochmuth.com/mp3/Tchaikovsky_Rococo_Var_orch.mp3"
+        loop
+        playsinline
+      ></audio>
+
+      <br />
+
+      <div class="Buttongrid" id="buttons"></div>
+
+      <br />
+
+      <div class="text">
+        "Above" is a randomly generated music art piece. It uses advanced
+        algorithms to generate unique compositions in real time, based on random
+        inputs. The music is composed of multiple layers of samples, which are
+        combined and manipulated in unpredictable ways. Through its use of
+        randomness and technology, "Above" offers a constantly evolving musical
+        experience.
+      </div>
+    </div>
+
+    <script>
+      function secondsToHms(seconds) {
+        var h = Math.floor(seconds / 3600);
+        var m = Math.floor((seconds % 3600) / 60);
+        var s = Math.floor((seconds % 3600) % 60);
+
+        return (
+          (h < 10 ? "0" + h : h) +
+          ":" +
+          (m < 10 ? "0" + m : m) +
+          ":" +
+          (s < 10 ? "0" + s : s)
+        );
+      }
+
+      const audio = document.getElementById("audio");
+      const progress = document.getElementById("progress");
+      const hms = document.getElementById("hms");
+      let playing = false;
+
+      document.getElementById("play").addEventListener("click", () => {
+        if (playing) {
+          document.getElementById("playing").style.display = "none";
+          document.getElementById("paused").style.display = "block";
+          document.getElementById("stop").style.opacity = 0.3;
+          audio.pause();
+          playing = false;
+        } else {
+          document.getElementById("playing").style.display = "block";
+          document.getElementById("paused").style.display = "none";
+          document.getElementById("stop").style.opacity = 1;
+          audio.play();
+          playing = true;
+        }
+      });
+
+      document.getElementById("stop").addEventListener("click", () => {
+        if (playing) {
+          document.getElementById("playing").style.display = "none";
+          document.getElementById("paused").style.display = "block";
+          document.getElementById("stop").style.opacity = 0.3;
+          audio.pause();
+          audio.currentTime = 0;
+          playing = false;
+        }
+      });
+
+      audio.addEventListener("timeupdate", () => {
+        progress.value = audio.currentTime;
+        hms.innerHTML = secondsToHms(audio.currentTime);
+      });
+
+      // Add volume control
+
+      const volumetoggle = document.getElementById("volumetoggle");
+      const volume = document.getElementById("volume");
+
+      let showVolume = false;
+
+      volumetoggle.addEventListener("click", () => {
+        showVolume = !showVolume;
+        volume.style.opacity = showVolume ? 1 : 0;
+      });
+
+      volume.addEventListener("input", (el) => {
+        const value = parseFloat(el.target.value);
+        audio.volume = value;
+      });
+      // Add section buttons
+
+      const buttons = document.getElementById("buttons");
+
+      const buttonsData = [
+        { title: "Strings + Synth" },
+        { title: "Quartet 1" },
+        { title: "Duo Vlc - Vibr" },
+        { title: "Duo Flc + Vlc - Vibr" },
+        { title: "Trio Vlc - Vibr - Synth" },
+        { title: "Quintet 1" },
+        { title: "Sextet 1" },
+      ];
+
+      buttonsData.forEach((buttonData, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = buttonData.title;
+        btn.addEventListener("click", () => {
+          audio.currentTime = i * 100;
+        });
+        buttons.appendChild(btn);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,391 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+:root {
+  --accent: orange;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  -webkit-backface-visibility: hidden;
+  -backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  background-color: #111;
+  color: #fafafa;
+  font-family: Inter, sans-serif;
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h5,
+h6 {
+  all: unset;
+  display: block;
+}
+p {
+  all: unset;
+  line-height: 24px;
+}
+img,
+svg {
+  display: block;
+}
+
+/* Inputs etc */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  outline: none;
+  margin: 2em 0;
+  display: block;
+  background-color: #333;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  border-radius: 2px;
+  background-size: 0% 100%;
+  width: 25vw;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border: none;
+  border-radius: 1000px;
+  cursor: pointer;
+  background: var(--accent);
+  transition: all 200ms;
+  cursor: ew-resize;
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  height: 24px;
+  width: 24px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+input[type="range"].progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 4px;
+  width: 4px;
+  border: none;
+  border-radius: 1000px;
+  cursor: ew-resize;
+  transition: all 200ms;
+}
+
+input[type="range"].progress::-webkit-slider-thumb:empty {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  input[type="range"] {
+    width: 75vw;
+  }
+}
+progress {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--accent);
+  width: 25vw;
+}
+progress::-webkit-progress-bar {
+  background-color: #333;
+  border-radius: 2px;
+}
+progress::-webkit-progress-value {
+  background-color: var(--accent);
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+@media (max-width: 800px) {
+  progress {
+    width: 75vw;
+  }
+}
+
+/* Frontpage */
+
+header {
+  padding: 32px;
+  display: grid;
+  grid-template-columns: auto 1fr 3fr;
+  gap: 62px;
+}
+@media (max-width: 1200px) {
+  header {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-bottom: 32px;
+  }
+}
+header > div:nth-child(1) {
+  font-weight: 800;
+  font-size: 64px;
+}
+header .text {
+  font-size: 20px !important;
+}
+
+.Row {
+  display: grid;
+  grid-template-columns: auto 2fr 1fr;
+  gap: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  height: 296px;
+}
+.Row.reverse {
+  grid-template-columns: auto 2fr auto;
+}
+@media (max-width: 1200px) {
+  .Row,
+  .Row.reverse {
+    grid-template-columns: 1fr;
+    gap: 0;
+    height: auto;
+  }
+}
+.Row > a {
+  padding: 32px !important;
+  all: unset;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 500ms;
+  display: block;
+}
+.Row > a:hover {
+  opacity: 1;
+}
+.Row a img {
+  margin-top: 16px;
+  filter: invert();
+  width: 56px;
+  height: 56px;
+}
+@media (max-width: 1200px) {
+  .Row > a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.Row .text {
+  padding: 24px 24px 24px 0;
+  overflow: scroll;
+  height: 100%;
+}
+.Row h2,
+.Row h3 {
+  font-size: 56px;
+  line-height: 100%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+@media (max-width: 800px) {
+  .Row h2,
+  .Row h3 {
+    font-size: 48px;
+    line-height: 100%;
+    word-break: break-all;
+  }
+}
+.Row h2 {
+  opacity: 0.5;
+}
+.Row > img {
+  opacity: 0.5;
+  transition: opacity 1000ms;
+  object-fit: contain;
+  width: 100%;
+  overflow: hidden;
+  height: 296px;
+}
+.Row img:hover {
+  opacity: 1;
+}
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 256px 32px 32px 32px;
+  line-height: 150%;
+  opacity: 0.4;
+}
+
+/* Player pages */
+
+.Content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px;
+  gap: 32px;
+  align-items: center;
+}
+.Nav {
+  padding: 0 32px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 600;
+}
+.Nav img {
+  filter: invert();
+  width: 32px;
+  height: 32px;
+}
+
+/* Volume control */
+
+.Volume {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity 300ms;
+}
+.Volume:hover {
+  opacity: 1;
+}
+.Volume button {
+  all: unset;
+  cursor: pointer;
+}
+.Volume input {
+  width: 100px;
+}
+
+/* Play / pause component */
+
+.Play {
+  all: unset;
+  display: flex;
+  align-items: center;
+  border: 4px solid white;
+  border-radius: 10000px;
+  cursor: pointer;
+  transition: all 200ms;
+  opacity: 0.8;
+}
+
+.Play:hover {
+  opacity: 1;
+}
+
+.Play > img {
+  filter: invert();
+  width: 64px;
+  height: 64px;
+  padding: 20px;
+}
+
+/* Stop button */
+
+.Stop {
+  border: 2px solid white;
+  border-radius: 10000px;
+}
+.Stop img {
+  filter: invert();
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+}
+
+.Title > div {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+@media (max-width: 800px) {
+  .Title > div {
+    display: block;
+    text-align: center;
+  }
+}
+.Title h2,
+.Title h3 {
+  font-size: 56px;
+  line-height: 100%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+@media (max-width: 800px) {
+  .Title h2,
+  .Title h3 {
+    font-size: 48px;
+    line-height: 100%;
+    word-break: break-all;
+  }
+}
+.Title h2 {
+  opacity: 0.5;
+}
+
+.Buttongrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.Buttongrid button {
+  all: unset;
+  cursor: pointer;
+  border: 2px solid white;
+  aspect-ratio: 2 / 1;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  opacity: 0.7;
+  transition: opacity 300ms;
+}
+
+.Buttongrid button:hover {
+  opacity: 1;
+}
+
+@media (max-width: 800px) {
+  .Buttongrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.text {
+  max-width: 60ch;
+  margin: 0 auto;
+  line-height: 150%;
+  opacity: 0.4;
+  transition: opacity 1000ms;
+}
+
+.text:hover {
+  opacity: 1;
+}
