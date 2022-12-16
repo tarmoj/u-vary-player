@@ -124,6 +124,9 @@ progress::-webkit-progress-value {
     width: 75vw;
   }
 }
+
+/* Frontpage row */
+
 .Row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -205,4 +208,161 @@ progress::-webkit-progress-value {
 }
 .text:hover {
   opacity: 1;
+}
+
+/* Index page */
+
+header {
+  padding: 32px;
+  display: grid;
+  grid-template-columns: auto 4fr 1fr;
+  gap: 62px;
+  padding-bottom: 256px;
+}
+p {
+  opacity: 0.7;
+  padding-right: 64px !important;
+}
+@media (max-width: 800px) {
+  header {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-bottom: 32px;
+  }
+}
+header > div:nth-child(1) {
+  font-weight: 800;
+  font-size: 28px;
+}
+header p {
+  line-height: 28px;
+  font-size: 20px !important;
+}
+.Row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+@media (max-width: 800px) {
+  .Row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+.Row > div:nth-child(1) {
+  padding: 24px;
+}
+.Row p {
+  padding: 24px;
+}
+.Row h2,
+.Row h3 {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 90%;
+}
+@media (max-width: 800px) {
+  .Row h2,
+  .Row h3 {
+    font-size: 48px;
+    line-height: 100%;
+    word-break: break-all;
+  }
+}
+.Row h2 {
+  opacity: 0.5;
+}
+.Row img {
+  opacity: 0.5;
+  transition: opacity 1000ms;
+  object-fit: contain;
+  width: 100%;
+}
+.Row img:hover {
+  opacity: 1;
+}
+@media (max-width: 800px) {
+  .up {
+    margin-top: -30vh;
+    z-index: -1;
+  }
+  .right {
+    margin-left: 20vh;
+    z-index: -1;
+  }
+}
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 256px 32px 32px 32px;
+}
+
+/* Player pages */
+progress {
+  accent-color: orange;
+}
+.Play {
+  all: unset;
+  display: flex;
+  align-items: center;
+  border: 4px solid white;
+  border-radius: 10000px;
+  cursor: pointer;
+  transition: all 200ms;
+  opacity: 0.8;
+}
+.Play:hover {
+  opacity: 1;
+}
+
+.Play > img {
+  filter: invert();
+  width: 64px;
+  height: 64px;
+  padding: 20px;
+}
+.Nav {
+  padding: 0 32px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+.Row > div {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+@media (max-width: 800px) {
+  .Row > div {
+    display: block;
+    text-align: center;
+  }
+}
+.Grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+}
+.Grid button {
+  all: unset;
+  cursor: pointer;
+  border: 2px solid white;
+  aspect-ratio: 2 / 1;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  opacity: 0.7;
+  transition: 300ms;
+}
+.Grid button:hover {
+  opacity: 1;
+}
+@media (max-width: 800px) {
+  .Grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 }
