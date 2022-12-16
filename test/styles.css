@@ -41,6 +41,9 @@ img,
 svg {
   display: block;
 }
+
+/* Inputs etc */
+
 input[type="range"] {
   -webkit-appearance: none;
   height: 4px;
@@ -125,105 +128,15 @@ progress::-webkit-progress-value {
   }
 }
 
-/* Frontpage row */
-
-.Row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-}
-@media (max-width: 800px) {
-  .Row {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-}
-.Row > div:nth-child(1) {
-  padding: 24px;
-}
-.Row p {
-  padding: 24px;
-}
-.Row h2,
-.Row h3 {
-  font-size: 64px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 90%;
-}
-@media (max-width: 800px) {
-  .Row h2,
-  .Row h3 {
-    font-size: 48px;
-    line-height: 100%;
-    word-break: break-all;
-  }
-}
-.Row h2 {
-  opacity: 0.5;
-}
-.Row img {
-  opacity: 0.5;
-  transition: opacity 1000ms;
-  object-fit: contain;
-  width: 100%;
-}
-.Row img:hover {
-  opacity: 1;
-}
-.up {
-  margin-top: -20vh;
-  z-index: -1;
-}
-.down {
-  margin-top: -20vh;
-  z-index: -1;
-}
-.right {
-  margin-left: 10vh;
-  z-index: -1;
-}
-@media (max-width: 800px) {
-  .up-mobile {
-    margin-top: -20vh;
-    z-index: -1;
-  }
-  .down-mobile {
-    margin-top: -20vh;
-    z-index: -1;
-  }
-  .right-mobile {
-    margin-left: 10vh;
-    z-index: -1;
-  }
-}
-
-.text {
-  max-width: 60ch;
-  margin: 0 auto;
-  line-height: 150%;
-  opacity: 0.4;
-  transition: all 1000ms;
-}
-.text:hover {
-  opacity: 1;
-}
-
-/* Index page */
+/* Frontpage */
 
 header {
   padding: 32px;
   display: grid;
-  grid-template-columns: auto 4fr 1fr;
+  grid-template-columns: auto 1fr 3fr;
   gap: 62px;
-  padding-bottom: 256px;
 }
-p {
-  opacity: 0.7;
-  padding-right: 64px !important;
-}
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   header {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -232,36 +145,67 @@ p {
 }
 header > div:nth-child(1) {
   font-weight: 800;
-  font-size: 28px;
+  font-size: 64px;
 }
-header p {
-  line-height: 28px;
+header .text {
   font-size: 20px !important;
 }
+
 .Row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: auto 2fr 1fr;
   gap: 32px;
   border-top: 1px solid rgba(255, 255, 255, 0.5);
+  height: 296px;
 }
-@media (max-width: 800px) {
-  .Row {
+.Row.reverse {
+  grid-template-columns: auto 2fr auto;
+}
+@media (max-width: 1200px) {
+  .Row,
+  .Row.reverse {
     grid-template-columns: 1fr;
     gap: 0;
+    height: auto;
   }
 }
-.Row > div:nth-child(1) {
-  padding: 24px;
+.Row > a {
+  padding: 32px !important;
+  all: unset;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 500ms;
+  display: block;
 }
-.Row p {
-  padding: 24px;
+.Row > a:hover {
+  opacity: 1;
+}
+.Row a img {
+  margin-top: 16px;
+  filter: invert();
+  width: 56px;
+  height: 56px;
+}
+@media (max-width: 1200px) {
+  .Row > a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.Row .text {
+  padding: 24px 24px 24px 0;
+  overflow: scroll;
+  height: 100%;
 }
 .Row h2,
 .Row h3 {
-  font-size: 64px;
+  font-size: 56px;
+  line-height: 100%;
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 90%;
+  white-space: nowrap;
 }
 @media (max-width: 800px) {
   .Row h2,
@@ -274,34 +218,35 @@ header p {
 .Row h2 {
   opacity: 0.5;
 }
-.Row img {
+.Row > img {
   opacity: 0.5;
   transition: opacity 1000ms;
   object-fit: contain;
   width: 100%;
+  overflow: hidden;
+  height: 296px;
 }
 .Row img:hover {
   opacity: 1;
 }
-@media (max-width: 800px) {
-  .up {
-    margin-top: -30vh;
-    z-index: -1;
-  }
-  .right {
-    margin-left: 20vh;
-    z-index: -1;
-  }
-}
 footer {
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   padding: 256px 32px 32px 32px;
+  line-height: 150%;
+  opacity: 0.4;
 }
 
 /* Player pages */
-progress {
-  accent-color: orange;
+
+.Nav {
+  padding: 0 32px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
 }
+
 .Play {
   all: unset;
   display: flex;
@@ -312,6 +257,7 @@ progress {
   transition: all 200ms;
   opacity: 0.8;
 }
+
 .Play:hover {
   opacity: 1;
 }
@@ -322,30 +268,25 @@ progress {
   height: 64px;
   padding: 20px;
 }
-.Nav {
-  padding: 0 32px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 600;
-}
-.Row > div {
+
+.Title > div {
   display: flex;
   gap: 16px;
   justify-content: center;
 }
 @media (max-width: 800px) {
-  .Row > div {
+  .Title > div {
     display: block;
     text-align: center;
   }
 }
+
 .Grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 16px;
 }
+
 .Grid button {
   all: unset;
   cursor: pointer;
@@ -355,14 +296,28 @@ progress {
   border-radius: 4px;
   display: flex;
   opacity: 0.7;
-  transition: 300ms;
+  transition: opacity 300ms;
 }
+
 .Grid button:hover {
   opacity: 1;
 }
+
 @media (max-width: 800px) {
   .Grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+}
+
+.text {
+  max-width: 60ch;
+  margin: 0 auto;
+  line-height: 150%;
+  opacity: 0.4;
+  transition: opacity 1000ms;
+}
+
+.text:hover {
+  opacity: 1;
 }
