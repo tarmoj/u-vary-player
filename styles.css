@@ -41,7 +41,10 @@ img,
 svg {
   display: block;
 }
-
+a {
+  color: white;
+  text-underline-offset: 0.2em;
+}
 /* Inputs etc */
 
 input[type="range"] {
@@ -130,24 +133,24 @@ progress::-webkit-progress-value {
 
 /* Frontpage */
 
-header {
+.FrontpageHeader {
   padding: 32px;
   display: grid;
   grid-template-columns: auto 1fr 3fr;
   gap: 62px;
 }
 @media (max-width: 1200px) {
-  header {
+  .FrontpageHeader {
     grid-template-columns: 1fr;
     gap: 16px;
     padding-bottom: 32px;
   }
 }
-header > div:nth-child(1) {
+.FrontpageHeader > div:nth-child(1) {
   font-weight: 800;
   font-size: 64px;
 }
-header .text {
+.FrontpageHeader .text {
   font-size: 20px !important;
 }
 
@@ -229,7 +232,7 @@ header .text {
 .Row img:hover {
   opacity: 1;
 }
-footer {
+.FrontpageFooter {
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   padding: 256px 32px 32px 32px;
   line-height: 150%;
@@ -254,13 +257,21 @@ footer {
   justify-content: space-between;
   font-size: 20px;
   font-weight: 600;
+  opacity: 0.7;
+  transition: opacity 300ms;
 }
 .Nav img {
   filter: invert();
   width: 32px;
   height: 32px;
 }
-
+.Nav a {
+  display: block;
+  cursor: pointer;
+}
+.Nav a:hover {
+  opacity: 1 !important;
+}
 /* Volume control */
 
 .Volume {
