@@ -9,12 +9,9 @@
   </head>
   <body>
     <nav class="Nav">
-      <img
-        style="filter: invert(); width: 24px; height: 24px"
-        src="https://api.iconify.design/cil:arrow-circle-left.svg"
-      />
+      <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
     </nav>
-    <div class="Row" style="display: block; border-top: none">
+    <div class="Title" style="display: block; border-top: none">
       <div>
         <h2>Elis Hallik</h2>
         <h3>Above</h3>
@@ -40,17 +37,14 @@
         />
       </button>
 
+      <div id="stop" class="Stop" style="opacity: 0.2">
+        <img src="https://api.iconify.design/cil:media-stop.svg" />
+      </div>
+
       <progress id="progress" value="0" max="1000" step="any"></progress>
-      <input
-        id="progress2"
-        type="range"
-        value="0"
-        max="1000"
-        step="any"
-        class="progress"
-      />
 
       <div id="hms">00:00:00</div>
+
       <audio
         id="audio"
         src="http://www.hochmuth.com/mp3/Tchaikovsky_Rococo_Var_orch.mp3"
@@ -58,17 +52,9 @@
         playsinline
       ></audio>
 
-      <p></p>
+      <br />
 
-      <div class="Grid">
-        <button>Strings + Synth</button>
-        <button>Quartet 1</button>
-        <button>Duo Vlc - Vibr</button>
-        <button>Duo Flc + Vlc - Vibr</button>
-        <button>Trio Vlc - Vibr - Synth</button>
-        <button>Quintet 1</button>
-        <button>Sextet 1</button>
-      </div>
+      <div class="Buttongrid" id="buttons"></div>
 
       <br />
 
@@ -80,7 +66,6 @@
         randomness and technology, "Above" offers a constantly evolving musical
         experience.
       </div>
-      <!-- <img src="./elis.png" /> -->
     </div>
 
     <script>
@@ -100,7 +85,6 @@
 
       const audio = document.getElementById("audio");
       const progress = document.getElementById("progress");
-      const progress2 = document.getElementById("progress2");
       const hms = document.getElementById("hms");
 
       let playing = false;
@@ -109,26 +93,55 @@
         if (playing) {
           document.getElementById("playing").style.display = "none";
           document.getElementById("paused").style.display = "block";
+          document.getElementById("stop").style.opacity = 0.3;
           audio.pause();
           playing = false;
         } else {
           document.getElementById("playing").style.display = "block";
           document.getElementById("paused").style.display = "none";
+          document.getElementById("stop").style.opacity = 1;
           audio.play();
           playing = true;
         }
       });
 
+      document.getElementById("stop").addEventListener("click", () => {
+        if (playing) {
+          document.getElementById("playing").style.display = "none";
+          document.getElementById("paused").style.display = "block";
+          document.getElementById("stop").style.opacity = 0.3;
+          audio.pause();
+          audio.currentTime = 0;
+          playing = false;
+        }
+      });
+
       audio.addEventListener("timeupdate", () => {
         progress.value = audio.currentTime;
-        progress2.value = audio.currentTime;
-        progress2.style.backgroundSize = `${audio.currentTime / 10}% 100%`;
         hms.innerHTML = secondsToHms(audio.currentTime);
       });
 
-      progress2.addEventListener("input", (e) => {
-        const value = parseFloat(e.target.value);
-        audio.currentTime = value;
+      // Add buttons
+
+      const buttons = document.getElementById("buttons");
+
+      const buttonsData = [
+        { title: "Strings + Synth" },
+        { title: "Quartet 1" },
+        { title: "Duo Vlc - Vibr" },
+        { title: "Duo Flc + Vlc - Vibr" },
+        { title: "Trio Vlc - Vibr - Synth" },
+        { title: "Quintet 1" },
+        { title: "Sextet 1" },
+      ];
+
+      buttonsData.forEach((buttonData, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = buttonData.title;
+        btn.addEventListener("click", () => {
+          audio.currentTime = i * 100;
+        });
+        buttons.appendChild(btn);
       });
     </script>
   </body>

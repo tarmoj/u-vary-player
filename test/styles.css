@@ -240,11 +240,16 @@ footer {
 
 .Nav {
   padding: 0 32px;
-  height: 72px;
+  height: 96px;
   display: flex;
   align-items: center;
   font-size: 20px;
   font-weight: 600;
+}
+.Nav img {
+  filter: invert();
+  width: 32px;
+  height: 32px;
 }
 
 .Play {
@@ -269,6 +274,19 @@ footer {
   padding: 20px;
 }
 
+/* Stop button */
+
+.Stop {
+  border: 2px solid white;
+  border-radius: 10000px;
+}
+.Stop img {
+  filter: invert();
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+}
+
 .Title > div {
   display: flex;
   gap: 16px;
@@ -280,14 +298,33 @@ footer {
     text-align: center;
   }
 }
+.Title h2,
+.Title h3 {
+  font-size: 56px;
+  line-height: 100%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+@media (max-width: 800px) {
+  .Title h2,
+  .Title h3 {
+    font-size: 48px;
+    line-height: 100%;
+    word-break: break-all;
+  }
+}
+.Title h2 {
+  opacity: 0.5;
+}
 
-.Grid {
+.Buttongrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 16px;
 }
 
-.Grid button {
+.Buttongrid button {
   all: unset;
   cursor: pointer;
   border: 2px solid white;
@@ -299,12 +336,12 @@ footer {
   transition: opacity 300ms;
 }
 
-.Grid button:hover {
+.Buttongrid button:hover {
   opacity: 1;
 }
 
 @media (max-width: 800px) {
-  .Grid {
+  .Buttongrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
