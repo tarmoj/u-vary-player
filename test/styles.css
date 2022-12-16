@@ -60,8 +60,8 @@ input[type="range"] {
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
   border: none;
   border-radius: 1000px;
   cursor: pointer;
@@ -238,11 +238,20 @@ footer {
 
 /* Player pages */
 
+.Content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px;
+  gap: 32px;
+  align-items: center;
+}
 .Nav {
   padding: 0 32px;
   height: 96px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   font-size: 20px;
   font-weight: 600;
 }
@@ -251,6 +260,28 @@ footer {
   width: 32px;
   height: 32px;
 }
+
+/* Volume control */
+
+.Volume {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity 300ms;
+}
+.Volume:hover {
+  opacity: 1;
+}
+.Volume button {
+  all: unset;
+  cursor: pointer;
+}
+.Volume input {
+  width: 100px;
+}
+
+/* Play / pause component */
 
 .Play {
   all: unset;

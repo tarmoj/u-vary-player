@@ -4,13 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title></title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
     <nav class="Nav">
       <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      <div class="Volume">
+        <input id="volume" type="range" max="1" step="any" style="opacity: 0" />
+        <button id="volumetoggle">
+          <img src="https://api.iconify.design/system-uicons:volume-0.svg" />
+        </button>
+      </div>
     </nav>
+
     <div class="Title" style="display: block; border-top: none">
       <div>
         <h2>Elis Hallik</h2>
@@ -18,16 +25,7 @@
       </div>
     </div>
 
-    <div
-      style="
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 32px;
-        gap: 32px;
-        align-items: center;
-      "
-    >
+    <div class="Content">
       <button id="play" class="Play">
         <img id="paused" src="https://api.iconify.design/cil:media-play.svg" />
         <img
@@ -86,7 +84,6 @@
       const audio = document.getElementById("audio");
       const progress = document.getElementById("progress");
       const hms = document.getElementById("hms");
-
       let playing = false;
 
       document.getElementById("play").addEventListener("click", () => {
@@ -121,7 +118,23 @@
         hms.innerHTML = secondsToHms(audio.currentTime);
       });
 
-      // Add buttons
+      // Add volume control
+
+      const volumetoggle = document.getElementById("volumetoggle");
+      const volume = document.getElementById("volume");
+
+      let showVolume = false;
+
+      volumetoggle.addEventListener("click", () => {
+        showVolume = !showVolume;
+        volume.style.opacity = showVolume ? 1 : 0;
+      });
+
+      volume.addEventListener("input", (el) => {
+        const value = parseFloat(el.target.value);
+        audio.volume = value;
+      });
+      // Add section buttons
 
       const buttons = document.getElementById("buttons");
 
