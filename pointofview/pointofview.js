@@ -1,72 +1,78 @@
-let audio = null,
-  currentPart = 1;
+const audio = document.getElementById("audio");
+const play = document.getElementById("play");
+const playing = document.getElementById("playing");
+const paused = document.getElementById("paused");
+const stopping = document.getElementById("stopping");
+const progress = document.getElementById("progress");
+const hms = document.getElementById("hms");
+const current = document.getElementById("current");
 
-function getRandomSource(part) {
-  // pick a random soundfile from folder for the part1 or part 2
-  // ...
-}
+let isLoaded = false;
+let isPlaying = false;
 
-function showDialog(open) {
-  document.querySelector("#dialogDiv").style.visibility = open
-    ? "visible"
-    : "hidden";
-}
+let currentPart = 1;
 
-// same in above.js -  move to utils?
-function setLoaded(loaded) {
-  console.log("Loaded: ", loaded);
-  if (!loaded) {
-    document.querySelector("#playButton").disabled = true;
-    document.querySelector("#loadingSpan").innerHTML = "Loading ...";
-  } else {
-    document.querySelector("#playButton").disabled = false;
-    document.querySelector("#loadingSpan").innerHTML = "";
-  }
-}
+// Audio events
 
-function reaction(yes) {
-  // if yes, start second audio
-  console.log("Yes? ", yes);
-  if (yes) {
-    setLoaded(false);
+audio.addEventListener("canplaythrough", () => {
+  isLoaded = true;
+  hms.innerHTML = "00:00";
+  current.innerHTML = `Playing part ${currentPart}`;
+});
+
+audio.addEventListener("loadedmetadata", () => {
+  progress.max = audio.duration;
+});
+
+audio.addEventListener("timeupdate", () => {
+  progress.value = audio.currentTime;
+  hms.innerHTML = secondsToHms(audio.currentTime);
+});
+
+audio.addEventListener("ended", () => {
+  // TODO: bring back the logic to ask user whenever he/she
+  // wants to continue
+  // https://github.com/tarmoj/u-vary-player/commit/f17a73754aaf40cf410d9643c159307d286abf43
+  const isNext = confirm("Do you want to listen the next piece of music?");
+  if (isNext) {
     audio.src = "sounds/vaatenurk-II-demo.mp3"; // getRandomSource later
+    audio.play();
     currentPart = 2;
-    start();
-  } else {
-    // TODO: some kind or response
+    current.innerHTML = `Playing part ${currentPart}`;
   }
-  showDialog(false);
-}
+  // TODO: some kind or response
+});
 
-function start() {
-  if (audio) audio.play();
-}
+// Transport controls events
 
-function pause() {
-  if (audio) audio.pause();
-}
+play.addEventListener("click", () => {
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
+    // Styling
+    playing.style.display = "none";
+    paused.style.display = "block";
+    stopping.style.opacity = 0.3;
+  } else if (!isPlaying && isLoaded) {
+    // TODO: evey time "Play" is pressed, pick a new version (audio.src="" probably)?
+    audio.play();
+    isPlaying = true;
+    // Styling
+    playing.style.display = "block";
+    paused.style.display = "none";
+    stopping.style.opacity = 1;
+  } else {
+  }
+});
 
-function stop() {
-  if (audio) {
+stopping.addEventListener("click", () => {
+  if (isPlaying) {
     audio.pause();
     audio.currentTime = 0;
+    isPlaying = false;
+    // Styling
+    playing.style.display = "none";
+    paused.style.display = "block";
+    stopping.style.opacity = 0.3;
   }
-  // TODO: if stopped in part II goes back to part 1 ?
-}
-
-// TODO: evey time "Play" is pressed, pick a new version (audio.src="" probably)
-
-window.onload = () => {
-  audio = document.querySelector("#audio1");
-  audio.onended = () => {
-    if (currentPart == 1) {
-      showDialog(true);
-    } else {
-      console.log("2. part ended");
-      // do something. load new audio for part 1 ? currentPart = 1
-    }
-  };
-  showDialog(false);
-  setLoaded(false);
-  currentPart = 1;
-};
+});

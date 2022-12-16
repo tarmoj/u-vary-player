@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>U: Vary-player: Age Veeroos - Vaatenurk (Point of View)</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="./pointofview.js"></script>
+    <script src="../utils.js"></script>
   </head>
   <body>
     <img src="../images/age.png" class="Background" />
@@ -20,19 +20,37 @@
           <h3>Point of View</h3>
         </div>
       </div>
+
+      <!-- TODO: Hide this -->
       <audio
-        id="audio1"
-        src="sounds/vaatenurk-I-demo.mp3"
-        oncanplaythrough="setLoaded(true)"
+        id="audio"
+        src="./sounds/vaatenurk-I-demo.mp3"
+        controls
+        style="width: 100%"
       ></audio>
 
       <!--    Maybe rather use reusable code (similar in Above) like createControlRow() -->
-      <div id="controls">
-        <button id="playButton" onclick="start()">Play</button>
-        <button id="pauseButton" onclick="pause()">Pause</button>
-        <button id="stopButton" onclick="stop()">Stop</button>
+      <button id="play" class="Play">
+        <img id="paused" src="https://api.iconify.design/cil:media-play.svg" />
+        <img
+          id="playing"
+          style="display: none"
+          src="https://api.iconify.design/cil:media-pause.svg"
+        />
+      </button>
+
+      <div id="stopping" class="Stop" style="opacity: 0.2">
+        <img src="https://api.iconify.design/cil:media-stop.svg" />
       </div>
+
+      <progress id="progress" value="0" max="1000" step="any"></progress>
+
+      <div id="hms">Loading...</div>
+
+      <div id="current"></div>
+
       <span id="loadingSpan"></span>
+
       <div id="dialogDiv" style="visibility: hidden">
         This was the first part.<br />
         Are you sure you want to continue listening?<br />
@@ -40,5 +58,6 @@
         <button onclick="reaction(false)">No</button>
       </div>
     </div>
+    <script src="./pointofview.js"></script>
   </body>
 </html>
