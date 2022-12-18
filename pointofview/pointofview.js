@@ -8,37 +8,68 @@ const progress = document.getElementById("progress");
 const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
+const numberOfVersions = 3 ; // how many generated audio file pairs (partI-partII)
+
 let isLoaded = false;
 let currentPart = 1;
+let currentVersion = 1;
+let audioState = "stopped" ; // playing| paused | stopped - audio elent has only paused...
+
 
 function init() {
   pauseButton.style.display = "none";
   stopButton.style.opacity = 0.2;
   timestamp.innerHTML = "Loading...";
   currentPart.innerHTML = "";
+  setVersion();
+  load(1);
 }
 
 function start() {
+  audioState = "playing"; // to signal onLoaded handler
   if (isLoaded) {
-    // TODO: evey time "Play" is pressed, pick a new version (audio.src="" probably)?
-    audio.play();
-    //  isPlaying = true;
-    playButton.style.display = "none";
-    pauseButton.style.display = "block";
-    stopButton.style.opacity = 1;
+    play();
+  }  else {
+    console.log("Audio not ready. Wait for onLoad to start it");
   }
+}
+
+function play() {
+  audio.play();
+  audioState = "playing";
+  playButton.style.display = "none";
+  pauseButton.style.display = "block";
+  stopButton.style.opacity = 1;
+
 }
 
 function pause() {
   audio.pause();
-  //  isPlaying = false;
+  audioState = "paused";
   playButton.style.display = "block";
   pauseButton.style.display = "none";
 }
 
 function stop() {
   pause();
+  audioState="stopped";
   audio.currentTime = 0;
+  setVersion(); // after stop load a new version
+  load(currentPart);
+}
+
+function setVersion() {
+  currentVersion = 1 + Math.floor(Math.random()*numberOfVersions);
+  console.log("Set version to: ", currentVersion)
+}
+
+function load(part=1) { // part - 1 | 2
+  let source = (part==1) ? `sounds/${currentVersion}-I.mp3` : `sounds/${currentVersion}-II.mp3`;
+  console.log("New source", source);
+  isLoaded = false;
+  audio.src = source;
+  audio.load();
+
 }
 
 // Assign init event
@@ -54,9 +85,13 @@ stopButton.addEventListener("click", stop);
 // Assign audio events
 
 audio.addEventListener("canplaythrough", () => {
+  console.log("Loaded");
+  if (audioState==="playing") { // can bes set "playing" from start
+    play();
+  }
   isLoaded = true;
   timestamp.innerHTML = "00:00";
-  current.innerHTML = `Playing part ${currentPart}`;
+  current.innerHTML = `Part ${currentPart}.  <small><i>Fort testing: version ${currentVersion} </i></small>`;
 });
 
 audio.addEventListener("loadedmetadata", () => {
@@ -68,16 +103,27 @@ audio.addEventListener("timeupdate", () => {
   timestamp.innerHTML = secondsToTimestamp(audio.currentTime);
 });
 
+
+
 audio.addEventListener("ended", () => {
   // TODO: bring back the logic to ask user whenever he/she
   // wants to continue
   // https://github.com/tarmoj/u-vary-player/commit/f17a73754aaf40cf410d9643c159307d286abf43
-  const isNext = confirm("Do you want to listen the next piece of music?");
-  if (isNext) {
-    audio.src = "sounds/vaatenurk-II-demo.mp3"; // getRandomSource later
-    audio.play();
-    currentPart = 2;
-    current.innerHTML = `Playing part ${currentPart}`;
+  audioState = "stopped";
+  playButton.style.display = "block"; // mar the play button to initial state
+  pauseButton.style.display = "none";
+  if (currentPart===1) {
+    const isNext = confirm("Do you want to continue listening to the piece?");
+    if (isNext) {
+      load(2);
+      //audio.play();
+      audioState = "playing";
+      start();
+      currentPart = 2;
+      current.innerHTML = `Part ${currentPart}. <small><i>Fort testing: version ${currentVersion} </i></small>`;
+    } else {
+      // TODO: some kind or response
+    }
   }
-  // TODO: some kind or response
+
 });
