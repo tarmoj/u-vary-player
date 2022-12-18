@@ -143,7 +143,7 @@ def section(no):
         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[3])
         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[4])
         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[5])
-        data.nextStartTime += data.percStart + percussion["nextVoiceTime"]
+        data.nextStartTime = data.percStart + percussion["nextVoiceTime"]
         
     if no==7: # last leftover
         if (len(data.freeInstruments)!=1):

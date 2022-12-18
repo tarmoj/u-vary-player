@@ -56,6 +56,7 @@ function stop() {
   audio.currentTime = 0;
   setVersion(); // after stop load a new version
   load(currentPart);
+  // If stopn in Part 2 ? should it go to part 1? Later yes.
 }
 
 function setVersion() {
@@ -106,9 +107,6 @@ audio.addEventListener("timeupdate", () => {
 
 
 audio.addEventListener("ended", () => {
-  // TODO: bring back the logic to ask user whenever he/she
-  // wants to continue
-  // https://github.com/tarmoj/u-vary-player/commit/f17a73754aaf40cf410d9643c159307d286abf43
   audioState = "stopped";
   playButton.style.display = "block"; // mar the play button to initial state
   pauseButton.style.display = "none";
@@ -124,6 +122,11 @@ audio.addEventListener("ended", () => {
     } else {
       // TODO: some kind or response
     }
+  } else {
+    // if part 2 ends, go load new version for 1
+    setVersion();
+    currentPart = 1;
+    load(1);
   }
 
 });
