@@ -5,11 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+    <script src="../utils.js"></script>
   </head>
   <body>
     <nav class="Nav">
-      <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      <a href="/">
+        <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      </a>
       <div class="Volume">
         <input id="volume" type="range" max="1" step="any" style="opacity: 0" />
         <button id="volumetoggle">
@@ -18,7 +21,7 @@
       </div>
     </nav>
 
-    <div class="Title" style="display: block; border-top: none">
+    <div class="Title">
       <div>
         <h2>Elis Hallik</h2>
         <h3>Above</h3>
@@ -67,20 +70,6 @@
     </div>
 
     <script>
-      function secondsToHms(seconds) {
-        var h = Math.floor(seconds / 3600);
-        var m = Math.floor((seconds % 3600) / 60);
-        var s = Math.floor((seconds % 3600) % 60);
-
-        return (
-          (h < 10 ? "0" + h : h) +
-          ":" +
-          (m < 10 ? "0" + m : m) +
-          ":" +
-          (s < 10 ? "0" + s : s)
-        );
-      }
-
       const audio = document.getElementById("audio");
       const progress = document.getElementById("progress");
       const hms = document.getElementById("hms");
@@ -115,7 +104,7 @@
 
       audio.addEventListener("timeupdate", () => {
         progress.value = audio.currentTime;
-        hms.innerHTML = secondsToHms(audio.currentTime);
+        hms.innerHTML = secondsToTimestamp(audio.currentTime);
       });
 
       // Add volume control

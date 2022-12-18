@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>U: Vary-player: Elis Hallik -  Above</title>
-    <link rel="stylesheet" href="../uvp.css">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>U: Vary-player: Elis Hallik - Above</title>
+    <link rel="stylesheet" href="../styles.css" />
     <script src="https://unpkg.com/tone"></script>
-    <script src="above.js"></script>
+    <script src="./above.js"></script>
   </head>
   <body>
-    <h1>U: Vary-player: Elis Hallik -  Above</h1>
-
-    <div id="controls">
-      <button id="playButton" onclick="start()">Play</button>
-      <button id="pauseButton" onclick="pause()">Pause</button>
-      <button id="stopButton" onclick="stop()">Stop</button>
-      <span id="time">00:00</span>
-    </div>
-    <div id="infoDiv">You are listening to the piece for <span id="counterSpan">Nth</span>. time.</div>
-    <div id="selectionDiv">
+    <nav class="Nav">
+      <a href="/">
+        <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      </a>
+    </nav>
+    <img src="../images/elis.png" class="Background" />
+    <div class="Content">
+      <div class="Title">
+        <div>
+          <h2>Elis Hallik</h2>
+          <h3>Above</h3>
+        </div>
+      </div>
+      <div id="controls">
+        <button id="playButton" onclick="start()">Play</button>
+        <button id="pauseButton" onclick="pause()">Pause</button>
+        <button id="stopButton" onclick="stop()">Stop</button>
+        <input id="volumeSlider" type="range"  class="Volume" min="0" max="1" step="0.01" value="0.6" />
+      </div>
+      <div id="time">00:00</div>
+      <div id="infoDiv">
+        You are listening to the piece for <span id="counterSpan">Nth</span>.
+        time.
+      </div>
       <p>
-        Later: this menu will be shown after listening to the piece for X (2?) times. Shown for testing now.
+        Later: this menu will be shown after listening to the piece for X (2?)
+        times. Shown for testing now.
       </p>
       <select id="versionSelect"></select>
       <span id="loadingSpan"></span>
     </div>
-    <br>
-    <a href="javascript:history.back()">Back</a>
-
   </body>
 </html>

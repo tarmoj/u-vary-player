@@ -4,7 +4,7 @@
 
 
 // similar to object's properties
-let playbackData = null, pieceInfo = null, reverb=null;
+let playbackData = null, pieceInfo = null, reverb=null, gainNode=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
 let counter=0, loadedCounter=0, timerID=0, time = 0;
 let audioResumed = false;
@@ -29,7 +29,9 @@ function init() {
         lastTimeReaction();
     }
 
-    reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).toDestination();
+    const volume = parseFloat(document.querySelector("#volumeSlider").value);
+    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toDestination(); //
+    reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
     preparePlayback(0, counter); // load tracks, dispose old etc
 
     // UI operations
@@ -122,6 +124,12 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
     if (!playbackData) return;
     console.log("preparePlayback", pieceIndex, playListIndex);
 
+    if (Tone.Transport.state !==  "stopped") {
+        stop();
+        //TODO (tarmo): check that buffer is not destroyed too soon. Check the timings of stop() and start().
+        //TODO: perhaps something in UI is also needed
+    }
+
     setLoaded(false);
 
     // release memory of old tracks
@@ -199,6 +207,12 @@ const stop = () => {
     setTime(0);
 }
 
+function setVolume(value) {
+    if (gainNode) {
+        gainNode.gain.rampTo(value, 0.05);
+    }
+}
+
 function timestring(time) {
     const minutes = Math.floor(time / 60).toString();
     const seconds = (time % 60).toString();
@@ -242,9 +256,14 @@ function createMenu() {
     }, false);
 }
 
+
 window.onload = () => {
     console.log("Start here");
     loadTracksJson();
+
+    const volumeSlider = document.querySelector("#volumeSlider");
+    volumeSlider.addEventListener("input", (event)=> setVolume( parseFloat(event.target.value)));
+
     // createMenu(); // call it after fetch
 
 }
