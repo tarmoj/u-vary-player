@@ -16,7 +16,6 @@ async function resumeAudio() {
     await Tone.getContext().resume();
     console.log("Audio resume");
     audioResumed = true;
-    //preparePlayback(pieceIndex, counter);
 }
 
 function init() {
@@ -39,6 +38,12 @@ function init() {
     document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
     pauseButton.style.display = "none";
     stopButton.style.opacity = 0.2;
+
+    // TRY:
+    //Tone.Buffer.onprogress = ()=>console.log("Global progress");
+    // here one example of load progress But Tone.js r11 (should work also with r13
+    // http://sites.music.columbia.edu/cmc/courses/g6611/spring2018/week6/lbuf1c.html
+
 }
 
 
