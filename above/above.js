@@ -6,7 +6,7 @@
 // similar to object's properties
 let playbackData = null, pieceInfo = null, reverb=null, gainNode=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
-let counter=0, loadedCounter=0, timerID=0, time = 0;
+let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
 
@@ -29,7 +29,7 @@ function init() {
     }
 
     const volume = parseFloat(document.querySelector("#volumeSlider").value);
-    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toDestination(); //
+    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toMaster(); // ver 14: toDestination(); //
     reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
     preparePlayback(0, counter); // load tracks, dispose old etc
 
@@ -39,10 +39,15 @@ function init() {
     pauseButton.style.display = "none";
     stopButton.style.opacity = 0.2;
 
-    // TRY:
-    //Tone.Buffer.onprogress = ()=>console.log("Global progress");
-    // here one example of load progress But Tone.js r11 (should work also with r13
-    // http://sites.music.columbia.edu/cmc/courses/g6611/spring2018/week6/lbuf1c.html
+    // here one example of load progress works with Tone.js r13 but not r14
+    Tone.Buffer.on("progress",  (value) => {
+        progress = Math.round(value*100);
+        // temporary -  later probably progress widget
+        console.log("progress", progress);
+        document.querySelector("#loadingSpan").innerHTML = "Loading... " + progress + "%";
+    });
+
+
 
 }
 
