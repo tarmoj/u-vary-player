@@ -203,7 +203,7 @@ const start = () => {
 }
 
 const pause = () => {
-    Tone.Transport.toggle("+0.01");
+    Tone.Transport.pause("+0.01");
     // UI operations
     playButton.style.display = "block";
     pauseButton.style.display = "none";
