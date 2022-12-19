@@ -128,8 +128,6 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
     if (Tone.Transport.state !==  "stopped") {
         stop();
-        //TODO (tarmo): check that buffer is not destroyed too soon. Check the timings of stop() and start().
-        //TODO: perhaps something in UI is also needed
     }
 
     setLoaded(false);
@@ -172,7 +170,7 @@ const start = () => {
         resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
     }
     console.log("Start");
-    Tone.Transport.start("+0.1"); // is this necessary? propbaly no, () should do.
+    Tone.Transport.start(); // is this necessary? propbaly no, () should do.
     const id =  Tone.Transport.scheduleRepeat(() => {
         setTime( Math.floor(Tone.Transport.seconds));
         //console.log("Duration: ", pieceInfo.duration);
@@ -203,7 +201,7 @@ const start = () => {
 }
 
 const pause = () => {
-    Tone.Transport.pause("+0.01");
+    Tone.Transport.pause();
     // UI operations
     playButton.style.display = "block";
     pauseButton.style.display = "none";
@@ -211,7 +209,7 @@ const pause = () => {
 
 const stop = () => {
     console.log("Stop");
-    Tone.Transport.stop("+0.05");
+    Tone.Transport.stop();
     Tone.Transport.clear(timerID);
     setTime(0);
     // UI operations
