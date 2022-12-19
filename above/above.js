@@ -37,6 +37,8 @@ function init() {
     // UI operations
     createMenu();
     document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+    pauseButton.style.display = "none";
+    stopButton.style.opacity = 0.2;
 }
 
 
@@ -194,10 +196,17 @@ const start = () => {
     }, 1);
     console.log("Created timer: ", id);
     timerID = id;
+    // UI operations
+    playButton.style.display = "none";
+    pauseButton.style.display = "block";
+    stopButton.style.opacity = 1;
 }
 
 const pause = () => {
     Tone.Transport.toggle("+0.01");
+    // UI operations
+    playButton.style.display = "block";
+    pauseButton.style.display = "none";
 }
 
 const stop = () => {
@@ -205,6 +214,9 @@ const stop = () => {
     Tone.Transport.stop("+0.05");
     Tone.Transport.clear(timerID);
     setTime(0);
+    // UI operations
+    playButton.style.display = "block";
+    pauseButton.style.display = "none";
 }
 
 function setVolume(value) {
