@@ -25,10 +25,20 @@ gkCenter[] init 14 ; center of stereo
 gkWidth[] init 14; stereo width
 
 
-gSEnsembleParts[] fillarray "Vaatenurk_FLUTE-St.wav", "Vaatenurk_CLARINET-St.wav", "Vaatenurk_VIOLIN-St.wav", "Vaatenurk_CELLO-St.wav", "Vaatenurk_PIANO-St.wav", "Vaatenurk_PERC ALL-St.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav"
+; vana
+;gSEnsembleParts[] fillarray "Vaatenurk_FLUTE-St.wav", "Vaatenurk_CLARINET-St.wav", "Vaatenurk_VIOLIN-St.wav", "Vaatenurk_CELLO-St.wav", "Vaatenurk_PIANO-St.wav", "Vaatenurk_PERC ALL-St.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav"
 
-gSSolos[] fillarray "Vaatenurk_SOOLO_FLUTE-St.wav", "Vaatenurk_SOOLO_CLARINET-St.wav", "Vaatenurk_SOOLO_VIOLIN-St.wav", "Vaatenurk_SOOLO_CELLO-St.wav",  "Vaatenurk_SOOLO_PIANO-St.wav",    "Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", 
-"Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav"
+; perc kihid kopeeritud vanast
+gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-Cello.wav",  "U_Vaatenurk-ENS-Clarinet.wav",  "U_Vaatenurk-ENS-Flute.wav",    "U_Vaatenurk-ENS-Piano.wav",  "U_Vaatenurk-ENS-Violin.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav" ; "U_Vaatenurk-ENS-Perc.wav"
+
+
+;gSSolos[] fillarray "Vaatenurk_SOOLO_FLUTE-St.wav", "Vaatenurk_SOOLO_CLARINET-St.wav", "Vaatenurk_SOOLO_VIOLIN-St.wav", "Vaatenurk_SOOLO_CELLO-St.wav",  "Vaatenurk_SOOLO_PIANO-St.wav",    "Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", 
+;"Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav"
+
+; uus
+gSSolos[] fillarray "U_Vaatenurk-SOLO-Flute-3.wav", "U_Vaatenurk-SOLO-Clarinet-3.wav", "U_Vaatenurk-SOLO-Violin-3.wav", "U_Vaatenurk-SOLO-Cello-3.wav", "U_Vaatenurk-SOLO-Piano-3.wav",  
+"Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", "Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav"
+;   "U_Vaatenurk-SOLO-Perc-3.wav",
 
 giNextVoiceTime[] fillarray 65, 91, 78, 62, 0, 67  ; in seconds - time when the next voice enters. 0 if nothing follows
 
