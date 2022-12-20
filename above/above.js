@@ -192,6 +192,7 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
     setLoaded(false);
 
     // release memory of old tracks
+    // TODO: bug on disposing Random tracks!
     if (playbackData.currentPlaylist ) {
         dispose(pieceIndex, playbackData.currentPlaylist); // clear old buffers
     }
