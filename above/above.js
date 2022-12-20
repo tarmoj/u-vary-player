@@ -6,7 +6,7 @@
 // similar to object's properties
 let playbackData = null, pieceInfo = null, reverb=null, gainNode=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
-let counter=0, loadedCounter=0, timerID=0, time = 0;
+let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
 
@@ -16,7 +16,6 @@ async function resumeAudio() {
     await Tone.getContext().resume();
     console.log("Audio resume");
     audioResumed = true;
-    //preparePlayback(pieceIndex, counter);
 }
 
 function init() {
@@ -30,13 +29,26 @@ function init() {
     }
 
     const volume = parseFloat(document.querySelector("#volumeSlider").value);
-    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toDestination(); //
+    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toMaster(); // ver 14: toDestination(); //
     reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
     preparePlayback(0, counter); // load tracks, dispose old etc
 
     // UI operations
     createMenu();
     document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+    pauseButton.style.display = "none";
+    stopButton.style.opacity = 0.2;
+
+    // here one example of load progress works with Tone.js r13 but not r14
+    Tone.Buffer.on("progress",  (value) => {
+        progress = Math.round(value*100);
+        // temporary -  later probably progress widget
+        console.log("progress", progress);
+        document.querySelector("#loadingSpan").innerHTML = "Loading... " + progress + "%";
+    });
+
+
+
 }
 
 
@@ -126,8 +138,6 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
     if (Tone.Transport.state !==  "stopped") {
         stop();
-        //TODO (tarmo): check that buffer is not destroyed too soon. Check the timings of stop() and start().
-        //TODO: perhaps something in UI is also needed
     }
 
     setLoaded(false);
@@ -170,7 +180,7 @@ const start = () => {
         resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
     }
     console.log("Start");
-    Tone.Transport.start("+0.1"); // is this necessary? propbaly no, () should do.
+    Tone.Transport.start(); // is this necessary? propbaly no, () should do.
     const id =  Tone.Transport.scheduleRepeat(() => {
         setTime( Math.floor(Tone.Transport.seconds));
         //console.log("Duration: ", pieceInfo.duration);
@@ -194,17 +204,27 @@ const start = () => {
     }, 1);
     console.log("Created timer: ", id);
     timerID = id;
+    // UI operations
+    playButton.style.display = "none";
+    pauseButton.style.display = "block";
+    stopButton.style.opacity = 1;
 }
 
 const pause = () => {
-    Tone.Transport.toggle("+0.01");
+    Tone.Transport.pause();
+    // UI operations
+    playButton.style.display = "block";
+    pauseButton.style.display = "none";
 }
 
 const stop = () => {
     console.log("Stop");
-    Tone.Transport.stop("+0.05");
+    Tone.Transport.stop();
     Tone.Transport.clear(timerID);
     setTime(0);
+    // UI operations
+    playButton.style.display = "block";
+    pauseButton.style.display = "none";
 }
 
 function setVolume(value) {
