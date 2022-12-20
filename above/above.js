@@ -13,7 +13,7 @@ const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Lef
 
 
 async function resumeAudio() {
-    await Tone.getContext().resume();
+    await Tone.context.resume(); //newer syntax: Tone.getContext().resume();
     console.log("Audio resume");
     audioResumed = true;
 }
