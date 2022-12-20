@@ -37,6 +37,7 @@ function init() {
     createMenu();
 
     const loadingProgress = document.querySelector("#loadingProgress")
+    const playbackProgress = document.querySelector("#playbackProgress")
     const time = document.querySelector("#time")
 
     document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
@@ -44,9 +45,6 @@ function init() {
     pauseButton.style.display = "none";
     stopButton.style.opacity = 0.2;
     playbackProgress.style.display = "none";
-    // TODO: How to get the duration of the playback file from Tone and update it 
-    // when the file changes
-    playbackProgress.max = 100;
 
     // TODO: 
     // here one example of load progress works with Tone.js r13 but not r14
@@ -208,7 +206,7 @@ const start = () => {
                     counter = newCounter;
                     setTimeout(() => {
                         preparePlayback(pieceIndex, newCounter); // load data for next version automatically
-                    }, 200); // give some time to stop
+                        }, 200); // give some time to stop
                 } else {
                     lastTimeReaction();
                     console.log("Counter would be out of range: ", counter, playbackData[pieceIndex].playList.length);
@@ -218,6 +216,10 @@ const start = () => {
     }, 1);
     console.log("Created timer: ", id);
     timerID = id;
+
+    const playbackProgress = document.querySelector("#playbackProgress")
+    playbackProgress.max = playbackData[pieceIndex].duration
+
     // UI operations
     playButton.style.display = "none";
     pauseButton.style.display = "block";
