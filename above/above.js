@@ -35,16 +35,30 @@ function init() {
 
     // UI operations
     createMenu();
+
+    const loadingProgress = document.querySelector("#loadingProgress")
+    const time = document.querySelector("#time")
+
     document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+   
     pauseButton.style.display = "none";
     stopButton.style.opacity = 0.2;
+    playbackProgress.style.display = "none";
+    // TODO: How to get the duration of the playback file from Tone and update it 
+    // when the file changes
+    playbackProgress.max = 100;
 
+    // TODO: 
     // here one example of load progress works with Tone.js r13 but not r14
     Tone.Buffer.on("progress",  (value) => {
-        progress = Math.round(value*100);
-        // temporary -  later probably progress widget
-        console.log("progress", progress);
-        document.querySelector("#loadingSpan").innerHTML = "Loading... " + progress + "%";
+        progress = Math.round(value * 100);
+        time.innerHTML = "Loading... " + progress + "%";
+        loadingProgress.value = progress;
+        if (progress === 100) {
+            loadingProgress.style.display = 'none';
+            playbackProgress.style.display = 'block';
+            time.innerHTML = '00:00'
+        }
     });
 
 
@@ -248,16 +262,17 @@ function timestring(time) {
 function setTime(seconds) {
     time = seconds;
     document.querySelector("#time").innerHTML = timestring(seconds);
+    document.querySelector("#playbackProgress").value = seconds;
 }
 
 function setLoaded(loaded) {
     console.log("Loaded: ", loaded);
     if (!loaded) {
         document.querySelector("#playButton").disabled = true;
-        document.querySelector("#loadingSpan").innerHTML = "Loading ..."
+        document.querySelector("#time").innerHTML = "Loading ..."
     } else {
         document.querySelector("#playButton").disabled = false;
-        document.querySelector("#loadingSpan").innerHTML = "";
+        document.querySelector("#time").innerHTML = "00:00";
     }
 }
 

@@ -8,7 +8,7 @@
     />
     <title>U: Vary-player: Elis Hallik - Above</title>
     <link rel="stylesheet" href="../styles.css" />
-<!--    Tone v 13 necessary for Buffer.on("progress")-->
+    <!--    Tone v 13 necessary for Buffer.on("progress")-->
     <script src="https://unpkg.com/tone@13.8.34"></script>
     <script src="./above.js"></script>
   </head>
@@ -53,7 +53,13 @@
         </div>
       </div>
       <div id="time">00:00</div>
-      <span id="loadingSpan"></span>
+      <progress
+        id="loadingProgress"
+        max="100"
+        step="any"
+        style="--accent: #777"
+      ></progress>
+      <progress id="playbackProgress" step="any"></progress>
       <div id="infoDiv">
         You are listening to the piece for <span id="counterSpan">Nth</span>.
         time.
@@ -63,7 +69,6 @@
         times. Shown for testing now.
       </p>
       <select id="versionSelect"></select>
-
     </div>
   </body>
 </html>
