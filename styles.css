@@ -53,7 +53,7 @@ input[type="range"] {
   outline: none;
   margin: 2em 0;
   display: block;
-  background-color: #333;
+  background-color: #555;
   background-image: linear-gradient(var(--accent), var(--accent));
   background-repeat: no-repeat;
   border-radius: 2px;
@@ -286,7 +286,6 @@ progress::-webkit-progress-value {
   display: flex;
   gap: 8px;
   align-items: center;
-  opacity: 0.8;
   transition: opacity 300ms;
 }
 .Volume:hover {
