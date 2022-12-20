@@ -8,8 +8,12 @@ const progress = document.getElementById("progress");
 const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
+const volumetoggle = document.getElementById("volumetoggle");
+const volume = document.getElementById("volume");
+
 let isLoaded = false;
 let currentPart = 1;
+let showVolume = false;
 
 function init() {
   pauseButton.style.display = "none";
@@ -80,4 +84,14 @@ audio.addEventListener("ended", () => {
     current.innerHTML = `Playing part ${currentPart}`;
   }
   // TODO: some kind or response
+});
+
+volumetoggle.addEventListener("click", () => {
+  showVolume = !showVolume;
+  volume.style.opacity = showVolume ? 1 : 0;
+});
+
+volume.addEventListener("input", (el) => {
+  const value = parseFloat(el.target.value);
+  audio.volume = value;
 });
