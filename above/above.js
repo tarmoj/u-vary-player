@@ -132,6 +132,43 @@ const dispose = (pieceIndex=0, playListIndex=0) => {
     }
 }
 
+function getRandomElementFromArray(array) {  // perhaps move to util? if needed somewhre else...
+    return array[Math.floor(Math.random() * array.length)];
+};
+
+function createRandomPlaylist(voices=6) { // creates and adds a random playlist for given number of voices
+    let newPlaylist = { "name":"Random", "tracks":[]};
+    // given that the tracks' number does not change and they are organised by voices! Otherwise filter by voice number in the name of track
+    let tracksByVoices = [
+        playbackData[pieceIndex].tracks.slice(0,5),
+        playbackData[pieceIndex].tracks.slice(5,8),
+        playbackData[pieceIndex].tracks.slice(8,12),
+        playbackData[pieceIndex].tracks.slice(12,17),
+        playbackData[pieceIndex].tracks.slice(17,23),
+        playbackData[pieceIndex].tracks.slice(23)
+    ];
+    console.log(tracksByVoices);
+    if (voices===6) {
+        let possiblePans = [-0.4, -0.2, -0.1, 0.1, 0.2, 0.4 ];
+        // shuffle array:
+        possiblePans.sort(() => Math.random() - 0.5);
+
+        // volume with slight random -12..-3
+        for (let i=0; i<6; i++) {
+            const volume = -12 + Math.random()*9;
+            const pan = possiblePans[i];
+            console.log("Vol, pan: ", volume, pan);
+            const track = getRandomElementFromArray(tracksByVoices[i]);
+            console.log("Picked Track:", track);
+            const newTrack = { name:track.name, pan: pan, volume: volume };
+            newPlaylist.tracks.push(newTrack)
+        }
+        // less voices requires other conditions
+    }
+    console.log("Created playlist: ", newPlaylist);
+    return newPlaylist;
+}
+
 const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  later: take it from pieceIndex
     if (!playbackData) return;
     console.log("preparePlayback", pieceIndex, playListIndex);
@@ -269,9 +306,15 @@ function createMenu() {
     for (let i=0; i<playLists.length;i++ ) {
         selectElement.options.add( new Option(playLists[i].name, i.toString()) ); // cut off .mp3 from the text part
     }
+    // add entry for random mix:
+    selectElement.options.add( new Option("Random", "999") ); // leave the last place for randomly generated playlist
     selectElement.addEventListener("change", (event) => {
         const index = parseInt(event.target.value);
         console.log("Selected version with index: ", index);
+        if (event.target.value==="999") {
+            console.log("Random selected");
+            playbackData[pieceIndex].playList[index] = createRandomPlaylist();
+        }
         preparePlayback(pieceIndex, index);
     }, false);
 }
