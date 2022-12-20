@@ -110,10 +110,12 @@ audio.addEventListener("ended", () => {
   audioState = "stopped";
   playButton.style.display = "block"; // mar the play button to initial state
   pauseButton.style.display = "none";
+
   if (currentPart===1) {
+    load(2); // try to load for any case to e ready on time
     const isNext = confirm("Do you want to continue listening to the piece?");
     if (isNext) {
-      load(2);
+      //load(2);
       //audio.play();
       audioState = "playing";
       start();

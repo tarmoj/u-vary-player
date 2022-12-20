@@ -21,17 +21,18 @@ data = GlobalData()
 
 data.fluteDegree = 0
 data.lastInstrument = None
-data.freeInstruments = [clarinet, violin, cello]
+data.freeInstruments = [flute, clarinet, violin, cello]
 data.nextStartTime = 0
-data.percStart = 120
+data.lastFileCounter = 1
+data.percStart = 125 # 2:05, maybe even 2:07
 
 
 def resetFreeInstruments():
-    data.freeInstruments = [clarinet, violin, cello]
+    data.freeInstruments = [flute, clarinet, violin, cello]
     
 def getInstrument(): # get one random and remove it from freeInstruments
     if (len(data.freeInstruments)==0): # reinit if empty
-        data.freeInstruments = [clarinet, violin, cello]
+        data.freeInstruments = [flute, clarinet, violin, cello]
     index = random.randint(0, len(data.freeInstruments)-1 )
     instrument = data.freeInstruments.pop(index)
     #print("getInstrument", index, instrument, freeInstruments)
@@ -42,7 +43,8 @@ def section(no):
     score += "\n; FLUTE\n"
     if no==1:
         resetFreeInstruments()
-        print("Section 1: FLute")
+        instrument = getInstrument()
+        print("Section 1:", instrument["macro"])
         degree = random.randint(5,15)
         if random.random()>0.5:
             degree = -degree
@@ -51,16 +53,16 @@ def section(no):
             degree += 180 # on some rare cases move to back
         width = 20
         size = 0.6 # reverb
-        wet = 0.1
+        wet = 0.1 # võibolla kitsa puhl suurem
         elevation = random.randint(20, 60)
-        scoreLines = '''i "StereoSound" 0 1 %s %d %d %.2f %.2f %d\n''' % (flute["macro"], degree, width, size, wet, elevation)
-        data.lastInstrument = flute
-        data.nextStartTime = flute["nextVoiceTime"]
+        scoreLines = '''i "StereoSound" 0 1 %s %d %d %.2f %.2f %d\n''' % (instrument["macro"], degree, width, size, wet, elevation)
+        data.lastInstrument = instrument
+        data.nextStartTime = instrument["nextVoiceTime"]
     if no==2: #rand instr 1
         instrument = getInstrument()
         print("Section 2: ", instrument["macro"])
         #print(fluteDegree)
-        degree = random.randint(30,60) 
+        degree = random.randint(30,60)
         if data.fluteDegree>=0: # if flute was right, move clarinet to left
             degree = -degree
         width = 60
@@ -73,13 +75,13 @@ def section(no):
         scoreLines += '''i "CenterAndWidthTo" ^+10 %d %s %d %d\n''' % (changeDuration, instrument["macro"], -degree, endWidth) # move to the other side and make stereo wider
         data.lastInstrument = instrument
         data.nextStartTime += instrument["nextVoiceTime"]
-        
+
     if no==3: #random instr 2
         instrument = getInstrument()
         print("Section 3: ", instrument["macro"])
         #i "StereoSound" [65+91] 1 $VL 0 90 0.7 0.5 ; try shorter reverb but more wet
-        # i "RandomChange" [65+91] 60 $VL     
-        degree = 0 
+        # i "RandomChange" [65+91] 60 $VL
+        degree = 0
         width = 90
         size = 0.7 # reverb
         wet = 0.5
@@ -88,12 +90,12 @@ def section(no):
         scoreLines += '''i "RandomChange" %d %d %s \n''' % (data.nextStartTime, instrument["duration"], instrument["macro"])
         data.lastInstrument = instrument
         data.nextStartTime += instrument["nextVoiceTime"]
-        
+
     if no==4: # piano
         print("Section 3: ", piano["macro"])
         #  i "StereoSound" [65+91+78] 1 $PF 0 40 0.7 0.1
-        # i "CenterAndWidthTo" ^+20 100  $PF 0 180    
-        degree = 0 
+        # i "CenterAndWidthTo" ^+20 100  $PF 0 180
+        degree = 0
         width = 40
         size = 0.7 # reverb
         wet = 0.1
@@ -102,8 +104,9 @@ def section(no):
         scoreLines = '''i "StereoSound" %d 1 $PF %d %d %.2f %.2f %d\n''' % (data.nextStartTime, degree, width, size, wet, elevation)
         scoreLines += '''i "CenterAndWidthTo" ^+20 %d $PF 0 180\n''' % (changeDuration) # slowly wider
         data.lastInstrument = piano
-        data.nextStartTime += 0 # last instrument in part 1 
-  
+        data.nextStartTime += 0 # last instrument in part 1
+
+    # TODO: javascript - lae enne valmis ja kohe mängima, kui jah
     if no==5: # ensemble -  part 2 starts here, score starts again from 0
         # 4 instruments in four corners
         melodyInstruments = [flute, clarinet, violin, cello]
@@ -124,27 +127,38 @@ def section(no):
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 40  \n''' % (percIndexes[2])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 50 0.6 0.2 90 \n''' % (percIndexes[3])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 60  0.6 0.2 60\n''' % (percIndexes[4])
-        scoreLines += '''i "CenterAndWidthTo" 10 110 [100+$PERC+1] -180 60 \n''' # slow full circle for layer 1 
-   
-    if no==6: # perc  TODO: perc should stay perhaps in the same position...
-        percIndexes = [0, 1, 2, 3, 4, 5]
-        random.shuffle(percIndexes)
+        scoreLines += '''i "CenterAndWidthTo" 10 110 [100+$PERC+1] -180 60 \n''' # slow full circle for layer 1
+
+    # perc solo with with layers
+#     if no==66: # old perc   TODO: perc should stay perhaps in the same position...
+#         percIndexes = [0, 1, 2, 3, 4, 5]
+#         random.shuffle(percIndexes)
+#         #  different positions for layers every time. start wide, everything front slowly
+#         scoreLines = '''#define PERC_START #%d#\n''' % (data.percStart)
+#         scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 120  \n''' % (percIndexes[0])
+#         scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 90  \n''' % (percIndexes[1])
+#         scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 260  \n''' % (percIndexes[2])
+#         scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 60  \n''' % (percIndexes[3])
+#         scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 50  \n''' % (percIndexes[4])
+#         scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 40 0.6 0.15 90  \n''' % (percIndexes[5])
+#         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[0])
+#         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[1])
+#         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[2])
+#         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[3])
+#         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[4])
+#         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[5])
+#         data.nextStartTime = data.percStart + percussion["nextVoiceTime"]
+#
+    if no==6: # old perc   TODO: perc should stay perhaps in the same position...
+        #i "StereoSound" $PERC_START 1 [$PERC+6] 0 180
+        #i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30
         #  different positions for layers every time. start wide, everything front slowly
         scoreLines = '''#define PERC_START #%d#\n''' % (data.percStart)
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 120  \n''' % (percIndexes[0])
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 90  \n''' % (percIndexes[1])
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 260  \n''' % (percIndexes[2])
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 60  \n''' % (percIndexes[3])
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 50  \n''' % (percIndexes[4])
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+%d] 0 40 0.6 0.15 90  \n''' % (percIndexes[5])
-        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[0])
-        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[1])
-        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[2])
-        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[3])
-        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[4])
-        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+%d] 0 30 \n''' % (percIndexes[5])
+        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+6] 0 180 0.6 0.15 30  \n'''
+        scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30 \n'''
+
         data.nextStartTime = data.percStart + percussion["nextVoiceTime"]
-        
+
     if no==7: # last leftover
         if (len(data.freeInstruments)!=1):
             print("Warning: Should have only 1 instrument left!")
@@ -156,10 +170,8 @@ def section(no):
         wet = 0.1
         elevation = random.randint(20, 40)
         scoreLines = '''i "StereoSound" %d 1 %s %d %d %.2f %.2f %d\n''' % (data.nextStartTime, instrument["macro"], degree, width, size, wet, elevation)
-  
-        
-        
-        
+
+
     #print(scoreLines)
     return scoreLines
 
@@ -168,13 +180,13 @@ def getAndIncreaseLastVersion():
     count = 0
     for line in file:
         print(line)
-        if line.startswith("versionsSaved"):
+        if line.startswith("nextVersion"):
             count = int(line.split("=")[1]) # no type control but it is fixed  this way
             print(count)
     if count>0:
         file.flush()
         file.seek(0)
-        file.write( "versionsSaved="+str(count+1) )        
+        file.write( "nextVersion="+str(count+1) )
     file.close()        
     return count
 
