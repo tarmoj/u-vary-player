@@ -204,6 +204,8 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
         versions: playbackData[pieceIndex].playList.length
     };
 
+    setVersionAndCount();
+
     loadedCounter = 0;
 
     const activeTracks = playbackData[pieceIndex].playList[playListIndex].tracks;
@@ -335,6 +337,11 @@ function createMenu() {
         }
         preparePlayback(pieceIndex, index);
     }, false);
+}
+
+function setVersionAndCount() {
+    document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+    document.querySelector("#versionSpan").innerHTML = pieceInfo.versionName;
 }
 
 
