@@ -53,20 +53,12 @@
       },
 
       { 	"counter": 1,
-        "name": "Quartet 1",
+        "name": "Quartet",
         "tracks": [
           { "name": "Vibraphone 3", "pan": -1, "volume": -1},
           { "name": "Flute 4", "pan": 0.44, "volume": -8},
           { "name": "Violin 5", "pan": 0.54, "volume": -3},
           { "name": "Synth 6", "pan": 0.16, "volume": -2}
-        ]
-      },
-
-      { 	"counter": 2,
-        "name": "Duo Vlc - Vibr",
-        "tracks": [
-          { "name": "Cello 3", "pan": -0.68, "volume": 0},
-          { "name": "Vibraphone 4", "pan": 0.68, "volume": 0}
         ]
       },
 
@@ -79,17 +71,8 @@
         ]
       },
 
-      { 	"counter": 4,
-        "name": "Trio  Vlc - Vibr - Synth",
-        "tracks": [
-          { "name": "Vibraphone 3", "pan": 0, "volume": 3},
-          { "name": "Cello 4", "pan": 0, "volume": 0},
-          { "name": "Synth 6", "pan": 0, "volume": 4}
-        ]
-      },
-
       { 	"counter": 5,
-        "name": "Quintet 1",
+        "name": "Quintet",
         "tracks": [
           { "name": "Vibraphone 1", "volume": -6, "pan": 0.16 },
           { "name": "Flute 2", "volume": -6, "pan": -0.36 },
@@ -100,7 +83,7 @@
       },
 
       { 	"counter": 6,
-        "name": "Sextet 1",
+        "name": "Sextet",
         "tracks": [
           { "name": "Vibraphone 1", "volume": -10, "pan": 0.2 },
           { "name": "Synth 2", "volume": -8, "pan": -0.66 },
