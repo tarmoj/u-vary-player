@@ -91,7 +91,7 @@ stopButton.addEventListener("click", stop);
 
 // Assign audio events
 
-audio.addEventListener("canplaythrough", () => {
+audio.addEventListener("canplay", () => {
   console.log("Loaded");
   if (audioState==="playing") { // can bes set "playing" from start
     play();
