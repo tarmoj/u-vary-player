@@ -345,13 +345,23 @@ function setVersionAndCount() {
 }
 
 
+let showVolume = false;
+
 window.onload = () => {
     console.log("Start here");
     loadTracksJson();
 
     const volumeSlider = document.querySelector("#volumeSlider");
+    const volumeToggle = document.querySelector("#volumeToggle");
+
     volumeSlider.addEventListener("input", (event)=> setVolume( parseFloat(event.target.value)));
 
+    volumeSlider.style.opacity = 0;
+
+    volumeToggle.addEventListener("click", () => {
+        showVolume = !showVolume;
+        volumeSlider.style.opacity = showVolume ? 1 : 0;
+      });
     // createMenu(); // call it after fetch
 
 }
