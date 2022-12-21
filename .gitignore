@@ -3,3 +3,11 @@
 .DS_Store
 # Local Netlify folder
 .netlify
+# csound related files
+pointofview/csound/tracks
+pointofview/csound/output
+pointofview/csound/sco
+pointofview/csound/hrtf-44100-*
+pointofview/csound/fileCounter
+
+TODO-tarmo
