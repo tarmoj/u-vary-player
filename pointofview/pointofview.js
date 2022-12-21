@@ -8,11 +8,8 @@ const progress = document.getElementById("progress");
 const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
-//const numberOfVersions = 3 ; // how many generated audio file pairs (partI-partII)
+const numberOfVersions = 7 ; // how many generated audio file pairs (partI-partII) NB! update
 
-let isLoaded = false;
-let currentPart = 1;
-let currentVersion = 1;
 
 const volumetoggle = document.getElementById("volumetoggle");
 const volume = document.getElementById("volume");
@@ -21,6 +18,7 @@ let isLoaded = false;
 let currentPart = 1;
 let showVolume = false;
 let audioState = "stopped" ; // playing| paused | stopped - audio elent has only paused...
+let currentVersion = 1;
 
 function init() {
   pauseButton.style.display = "none";
