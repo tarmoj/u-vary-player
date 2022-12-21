@@ -8,7 +8,8 @@
     />
     <title>U: Vary-player: Elis Hallik - Above</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="https://unpkg.com/tone"></script>
+    <!--    Tone v 13 necessary for Buffer.on("progress")-->
+    <script src="https://unpkg.com/tone@13.8.34"></script>
     <script src="./above.js"></script>
   </head>
   <body>
@@ -16,6 +17,16 @@
       <a href="../">
         <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
       </a>
+      <div class="Volume">
+        <input
+          id="volumeSlider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.6"
+        />
+      </div>
     </nav>
     <img src="../images/elis.png" class="Background" />
     <div class="Content">
@@ -25,13 +36,30 @@
           <h3>Above</h3>
         </div>
       </div>
-      <div id="controls">
-        <button id="playButton" onclick="start()">Play</button>
-        <button id="pauseButton" onclick="pause()">Pause</button>
-        <button id="stopButton" onclick="stop()">Stop</button>
-        <input id="volumeSlider" type="range"  class="Volume" min="0" max="1" step="0.01" value="0.6" />
+      <div id="controls" class="Content">
+        <button id="playButton" onclick="start()" class="PlayPause">
+          <img src="https://api.iconify.design/cil:media-play.svg" />
+        </button>
+        <button
+          id="pauseButton"
+          class="PlayPause"
+          id="pauseButton"
+          onclick="pause()"
+        >
+          <img src="https://api.iconify.design/cil:media-pause.svg" />
+        </button>
+        <div id="stopButton" class="Stop" onclick="stop()">
+          <img src="https://api.iconify.design/cil:media-stop.svg" />
+        </div>
       </div>
       <div id="time">00:00</div>
+      <progress
+        id="loadingProgress"
+        max="100"
+        step="any"
+        style="--accent: #777"
+      ></progress>
+      <progress id="playbackProgress" step="any"></progress>
       <div id="infoDiv">
         You are listening to the piece for <span id="counterSpan">Nth</span>.
         time.
@@ -41,7 +69,6 @@
         times. Shown for testing now.
       </p>
       <select id="versionSelect"></select>
-      <span id="loadingSpan"></span>
     </div>
   </body>
 </html>

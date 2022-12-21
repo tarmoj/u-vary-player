@@ -12,6 +12,12 @@
       <a href="../">
         <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
       </a>
+      <div class="Volume">
+        <input id="volume" type="range" max="1" step="any" style="opacity: 0" />
+        <button id="volumetoggle">
+          <img src="https://api.iconify.design/system-uicons:volume-0.svg" />
+        </button>
+      </div>
     </nav>
     <div class="Content">
       <div class="Title">
@@ -21,12 +27,8 @@
         </div>
       </div>
 
-      <!-- TODO: disable the controls -->
-      <audio
-        id="audio"
-        controls
-        style="width: 100%"
-      ></audio>
+
+      <audio id="audio"></audio>
 
       <button id="playButton" class="PlayPause">
         <img src="https://api.iconify.design/cil:media-play.svg" />

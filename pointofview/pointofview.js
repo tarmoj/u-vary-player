@@ -8,13 +8,19 @@ const progress = document.getElementById("progress");
 const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
-const numberOfVersions = 3 ; // how many generated audio file pairs (partI-partII)
+//const numberOfVersions = 3 ; // how many generated audio file pairs (partI-partII)
 
 let isLoaded = false;
 let currentPart = 1;
 let currentVersion = 1;
-let audioState = "stopped" ; // playing| paused | stopped - audio elent has only paused...
 
+const volumetoggle = document.getElementById("volumetoggle");
+const volume = document.getElementById("volume");
+
+let isLoaded = false;
+let currentPart = 1;
+let showVolume = false;
+let audioState = "stopped" ; // playing| paused | stopped - audio elent has only paused...
 
 function init() {
   pauseButton.style.display = "none";
@@ -131,4 +137,14 @@ audio.addEventListener("ended", () => {
     load(1);
   }
 
+});
+
+volumetoggle.addEventListener("click", () => {
+  showVolume = !showVolume;
+  volume.style.opacity = showVolume ? 1 : 0;
+});
+
+volume.addEventListener("input", (el) => {
+  const value = parseFloat(el.target.value);
+  audio.volume = value;
 });
