@@ -337,6 +337,36 @@ function createMenu() {
         }
         preparePlayback(pieceIndex, index);
     }, false);
+
+    // Add playlist buttons to a grid
+
+    const versionGrid = document.querySelector("#versionGrid");
+    playLists.forEach((playList, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = playList.name
+        btn.addEventListener("click", () => {
+            console.log("Selected version with index: ", i);
+            preparePlayback(pieceIndex, i);
+            // TODO: For debuggong, remove when select element is removed
+            selectElement.value = i
+        });
+        versionGrid.appendChild(btn);
+      });
+
+    // Add random button to a grid
+
+    const randomBtn = document.createElement("button");
+    randomBtn.textContent = "Random"
+    randomBtn.addEventListener("click", () => {
+        console.log("Random selected");
+        const index = 999
+        playbackData[pieceIndex].playList[index] = createRandomPlaylist();
+        preparePlayback(pieceIndex, index);
+        // TODO: For debuggong, remove when select element is removed
+        selectElement.value = index
+    });
+    versionGrid.appendChild(randomBtn);
+
 }
 
 function setVersionAndCount() {
