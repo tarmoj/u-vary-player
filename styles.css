@@ -367,13 +367,13 @@ progress::-webkit-progress-value {
   opacity: 0.5;
 }
 
-.Buttongrid {
+.Grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 16px;
 }
 
-.Buttongrid button {
+.Grid > * {
   all: unset;
   cursor: pointer;
   border: 2px solid white;
@@ -385,12 +385,12 @@ progress::-webkit-progress-value {
   transition: opacity 300ms;
 }
 
-.Buttongrid button:hover {
+.Grid > *:hover {
   opacity: 1;
 }
 
 @media (max-width: 800px) {
-  .Buttongrid {
+  .Grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
