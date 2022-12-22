@@ -64,16 +64,24 @@
       ></progress>
       <progress id="playbackProgress" step="any"></progress>
       <div id="infoDiv">
-        You are listening to the piece for the
-        <span id="counterSpan">Nth</span>. time. Version:
+        You have listened to the entire piece <span id="counterSpan">N</span> times. Version:
         <span id="versionSpan"></span>
       </div>
-      <p>
-        Later: this menu will be shown after listening to the piece for X (2?)
-        times. Shown for testing now.
+      <p><small><i>
+        For testing (temporary):
+        <button onclick='document.querySelector("#menuDiv").style.visibility="visible"'>Show menu</button>
+      </i></small>
       </p>
-      <select id="versionSelect"></select>
-      <div class="Grid" id="versionGrid"></div>
+      <div id="menuDiv" style="visibility: hidden">
+        <p>
+          <b>You have listened to all required versions. Thank you!</b><br />
+          Now you can select the version you want to hear from the menu below or create a new random mix:
+        </p>
+        <br />
+        <select id="versionSelect" hidden></select>
+        <div class="Grid" id="versionGrid"></div>
+      </div>
     </div>
   </body>
 </html>
+<

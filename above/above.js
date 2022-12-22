@@ -9,7 +9,7 @@ let hasListenedAll = false; // TODO: get from localStorage or similar
 let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
-
+const requiredListens = 5; // UPDATE, if necessary
 
 
 async function resumeAudio() {
@@ -24,7 +24,7 @@ function init() {
     // how many times listened?
     counter = getStoredCounter(playbackData[pieceIndex].uid);
     console.log("Found counter for ", counter, playbackData[pieceIndex].uid);
-    if (counter === playbackData[pieceIndex].playList.length-1) {
+    if (counter >=  requiredListens ) {
         lastTimeReaction();
     }
 
@@ -40,7 +40,7 @@ function init() {
     const playbackProgress = document.querySelector("#playbackProgress")
     const time = document.querySelector("#time")
 
-    document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+    document.querySelector("#counterSpan").innerHTML = (counter).toString();
    
     pauseButton.style.display = "none";
     stopButton.style.opacity = 0.2;
@@ -130,15 +130,12 @@ function getSoundfile(name, piece=pieceIndex) {
 }
 
 const dispose = (pieceIndex=0, playListIndex=0) => {
-    // release old tracks
-    for (let set of playbackData[pieceIndex].playList) {
-        if (set) {
-            for (let track of set.tracks) {
-                if (track.hasOwnProperty("channel")) {
-                    console.log("Trying to dispose: ", track.name);
-                    if (track.channel) track.channel.dispose();
-                    if (track.player) track.player.dispose();
-                }
+    if (playbackData[pieceIndex].playList[playListIndex]) {
+        for (let track of playbackData[pieceIndex].playList[playListIndex].tracks) {
+            if (track.hasOwnProperty("channel") && track.channel && track.player) {
+                console.log("Trying to dispose: ", track.name, track.channel);
+                if (track.channel) track.channel.dispose();
+                if (track.player) track.player.dispose();
             }
         }
     }
@@ -193,6 +190,7 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
     // release memory of old tracks
     // TODO: bug on disposing Random tracks!
+    console.log("playlist: current, index", playbackData.currentPlaylist, playListIndex)
     if (playbackData.currentPlaylist ) {
         dispose(pieceIndex, playbackData.currentPlaylist); // clear old buffers
     }
@@ -224,7 +222,9 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
 const lastTimeReaction = () => {
     console.log("This was the last available version. Now you can choose whichever you want");
-    hasListenedAll = true; // TODO: reflect on UI (show message, unhide menu)
+    hasListenedAll = true;
+    document.querySelector("#menuDiv").style.visibility="visible"
+
 }
 
 const start = () => {
@@ -232,7 +232,7 @@ const start = () => {
         resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
     }
     console.log("Start");
-    Tone.Transport.start(); // is this necessary? propbaly no, () should do.
+    Tone.Transport.start();
     const id =  Tone.Transport.scheduleRepeat(() => {
         setTime( Math.floor(Tone.Transport.seconds));
         //console.log("Duration: ", pieceInfo.duration);
@@ -241,7 +241,7 @@ const start = () => {
             if (!hasListenedAll) {
                 const newCounter = counter + 1;
                 console.log("Counter now: ", newCounter, counter);
-                if (newCounter < playbackData[pieceIndex].playList.length) {
+                if (newCounter < requiredListens) {
                     setStoredCounter(playbackData[pieceIndex].uid, newCounter);
                     counter = newCounter;
                     setTimeout(() => {
@@ -370,9 +370,12 @@ function createMenu() {
 }
 
 function setVersionAndCount() {
-    document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+    document.querySelector("#counterSpan").innerHTML = (counter).toString();
     document.querySelector("#versionSpan").innerHTML = pieceInfo.versionName;
 }
+
+// just for testing (to jump to the end):
+const  jump= () => Tone.Transport.seconds=465;
 
 
 let showVolume = false;

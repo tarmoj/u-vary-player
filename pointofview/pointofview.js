@@ -57,7 +57,8 @@ function pause() {
 function stop() {
   pause();
   audioState="stopped";
-  audio.currentTime = 0;
+  audio.currentTime = 0; // this should update the progress but it does not
+  progress.value = 0;
   setVersion(); // after stop load a new version
   load(currentPart);
   //load(1); // always load part 1 // TODO: does not work form 2. part
@@ -91,7 +92,7 @@ stopButton.addEventListener("click", stop);
 
 // Assign audio events
 
-audio.addEventListener("canplaythrough", () => {
+audio.addEventListener("canplay", () => {
   console.log("Loaded");
   if (audioState==="playing") { // can bes set "playing" from start
     play();
