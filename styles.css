@@ -438,4 +438,8 @@ progress::-webkit-progress-value {
   .Links {
     grid-template-columns: 1fr;
   }
+  .Links > a > h3 {
+    font-size: 24px;
+    font-weight: 600;
+  }
 }
