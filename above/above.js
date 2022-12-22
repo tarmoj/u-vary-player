@@ -8,6 +8,7 @@ let playbackData = null, pieceInfo = null, reverb=null, gainNode=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
 let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
+let requirePlayback = false; // for starting playback after one version has ended and new will be loaded
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
 const requiredListens = 5; // UPDATE, if necessary
 
@@ -110,6 +111,10 @@ function createPlayer(soundFile) {
             console.log("Local onload -  loaded", soundFile, loadedCounter, tracksInPlaylist );
             if (loadedCounter==tracksInPlaylist) {
                 setLoaded(true);
+                if (requirePlayback) {
+                    requirePlayback = false;
+                    start();
+                }
             }
 
         }
@@ -246,6 +251,7 @@ const start = () => {
                     counter = newCounter;
                     setTimeout(() => {
                         preparePlayback(pieceIndex, newCounter); // load data for next version automatically
+                        requirePlayback = true; // singal to play when loaded
                         }, 200); // give some time to stop
                 } else {
                     lastTimeReaction();

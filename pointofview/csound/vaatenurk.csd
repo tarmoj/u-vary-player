@@ -319,7 +319,22 @@ endin
 
 ; for testing
 
+i "StereoSound" 0 1 $FL 0 90 0.70 0.50 59
 
+i "CenterAndWidthTo" 12 2 $FL 90 40
+i "CenterAndWidthTo" 16 1.5 $FL 0 20
+i "CenterAndWidthTo" 24 1.5 $FL -90 60
+i "CenterAndWidthTo" 27 1.5 $FL 45 40
+i "CenterAndWidthTo" 32 0.5 $FL 120 40
+i "CenterAndWidthTo" 34 0.5 $FL 160 60
+i "CenterAndWidthTo" 37 0.5 $FL 180 70
+i "CenterAndWidthTo" 41 4 $FL 210 80
+i "CenterAndWidthTo" 48 2 $FL 260 90
+i "CenterAndWidthTo" 57 3 $FL 180 90
+i "CenterAndWidthTo" 60 3 $FL 120 60
+i "CenterAndWidthTo" 60 3 $FL 180 90
+e
+;
 
 ; perc test
 
@@ -445,6 +460,8 @@ e
 
 
 
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -459,7 +476,7 @@ e
   <g>240</g>
   <b>240</b>
  </bgcolor>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>center</objectName>
   <x>55</x>
   <y>97</y>
@@ -489,7 +506,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>width</objectName>
   <x>149</x>
   <y>98</y>
@@ -519,7 +536,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>57</x>
   <y>183</y>
@@ -550,7 +567,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>148</x>
   <y>183</y>
@@ -581,7 +598,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>wet</objectName>
   <x>159</x>
   <y>248</y>
@@ -611,7 +628,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>162</x>
   <y>333</y>
@@ -642,7 +659,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBKnob">
+ <bsbObject type="BSBKnob" version="2">
   <objectName>size</objectName>
   <x>60</x>
   <y>246</y>
@@ -672,7 +689,7 @@ e
   <flatstyle>true</flatstyle>
   <integerMode>false</integerMode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>63</x>
   <y>331</y>
@@ -703,7 +720,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>53</x>
   <y>55</y>
@@ -734,7 +751,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>56</x>
   <y>219</y>
@@ -765,7 +782,7 @@ e
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBVSlider">
+ <bsbObject type="BSBVSlider" version="2">
   <objectName>elevation</objectName>
   <x>254</x>
   <y>96</y>
@@ -784,7 +801,7 @@ e
   <resolution>-1.00000000</resolution>
   <randomizable group="0">false</randomizable>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>238</x>
   <y>185</y>
