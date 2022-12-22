@@ -9,7 +9,7 @@ let hasListenedAll = false; // TODO: get from localStorage or similar
 let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
-
+const requiredListens = 5; // UPDATE, if necessary
 
 
 async function resumeAudio() {
@@ -24,7 +24,7 @@ function init() {
     // how many times listened?
     counter = getStoredCounter(playbackData[pieceIndex].uid);
     console.log("Found counter for ", counter, playbackData[pieceIndex].uid);
-    if (counter === playbackData[pieceIndex].playList.length-1) {
+    if (counter >=  requiredListens ) {
         lastTimeReaction();
     }
 
@@ -222,7 +222,9 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
 const lastTimeReaction = () => {
     console.log("This was the last available version. Now you can choose whichever you want");
-    hasListenedAll = true; // TODO: reflect on UI (show message, unhide menu)
+    hasListenedAll = true;
+    document.querySelector("#menuDiv").style.visibility="visible"
+
 }
 
 const start = () => {
@@ -239,7 +241,7 @@ const start = () => {
             if (!hasListenedAll) {
                 const newCounter = counter + 1;
                 console.log("Counter now: ", newCounter, counter);
-                if (newCounter < playbackData[pieceIndex].playList.length) {
+                if (newCounter < requiredListens) {
                     setStoredCounter(playbackData[pieceIndex].uid, newCounter);
                     counter = newCounter;
                     setTimeout(() => {
