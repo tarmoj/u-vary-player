@@ -26,7 +26,7 @@ function init() {
   timestamp.innerHTML = "Loading...";
   currentPart.innerHTML = "";
   setVersion();
-  load(1); // TODO: if the url is given as .../pointofview (ie not from forntpage, ie no user action, load does not work)
+  load(1);
 }
 
 function start() {
@@ -59,10 +59,10 @@ function stop() {
   audioState="stopped";
   audio.currentTime = 0; // this should update the progress but it does not
   progress.value = 0;
+  // alwas go back to part 1 when stopped
+  currentPart = 1;
   setVersion(); // after stop load a new version
   load(currentPart);
-  //load(1); // always load part 1 // TODO: does not work form 2. part
-
 }
 
 function setVersion() {
@@ -75,9 +75,13 @@ function load(part=1) { // part - 1 | 2
   console.log("New source", source);
   isLoaded = false;
   audio.src = source;
-  // should we check for usertouch and Audio Resume somehow?
   audio.load();
 
+}
+
+// just for testing - jumps to the end of the part
+function jump() {
+  audio.currentTime = audio.duration - 5;
 }
 
 // Assign init event
