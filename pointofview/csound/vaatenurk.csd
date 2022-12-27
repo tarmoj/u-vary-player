@@ -29,16 +29,10 @@ gkElevation[] init 16
 gkCenter[] init 16 ; center of stereo
 gkWidth[] init 16; stereo width
 
-; vana
-;gSEnsembleParts[] fillarray "Vaatenurk_FLUTE-St.wav", "Vaatenurk_CLARINET-St.wav", "Vaatenurk_VIOLIN-St.wav", "Vaatenurk_CELLO-St.wav", "Vaatenurk_PIANO-St.wav", "Vaatenurk_PERC ALL-St.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav"
 
-; perc kihid kopeeritud vanast
 gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-FLUTE.wav", "U_Vaatenurk-ENS-CLARINET.wav","U_Vaatenurk-ENS-VIOLIN.wav", "U_Vaatenurk-ENS-CELLO.wav", "U_Vaatenurk-ENS-PIANO.wav", "U_Vaatenurk-ENS-PERC A.wav", "U_Vaatenurk-ENS-PERC B.wav", "U_Vaatenurk-ENS-PERC C.wav", "U_Vaatenurk-ENS-PERC D.wav", "U_Vaatenurk-ENS-PERC E.wav", "U_Vaatenurk-ENS-PERC F.wav"
 
-
-; uus
-gSSolos[] fillarray "U_Vaatenurk-FLUTE.wav", "U_Vaatenurk-CLARINET.wav", "U_Vaatenurk-VIOLIN.wav", "U_Vaatenurk-CELLO.wav", "U_Vaatenurk-PIANO.wav",  
-"Vaatenurk_PERC ALL.wav" 
+gSSolos[] fillarray "U_Vaatenurk-FLUTE.wav", "U_Vaatenurk-CLARINET.wav", "U_Vaatenurk-VIOLIN.wav", "U_Vaatenurk-CELLO.wav", "U_Vaatenurk-PIANO.wav", "U_Vaatenurk-PERC ALL.wav" 
 
 giNextVoiceTime[] fillarray 65, 91, 78, 62, 0, 67  ; in seconds - time when the next voice enters. 0 if nothing follows
 
@@ -310,8 +304,12 @@ schedule "Reverb",0, -1
 
 instr Reverb
 	
- kWet chnget "wet"
- kSize chnget "size"
+ ; NB! --------------- FIXED FOR TESTING ------------------- 	PUT BACK!
+ ;kWet chnget "wet"
+ ;kSize chnget "size"
+ kWet init 0.1
+ kSize init 0.7
+
 	  
  aReverbL, aReverbR freeverb gaL*kWet, gaR*kWet, kSize, 0.6
  outs aReverbL, aReverbR
@@ -331,56 +329,20 @@ endin
 #define PERC #5#
 
 ; for testing
-f 0 10
-i "StereoSound" 0 1 $VC 0 90 0.70 0.50 59
 
-i "RandomMove" 10 2 $VC
-i "RandomMove" 13 1.5 $VC
-i "RandomMove" 19 2.5 $VC
-i "RandomMove" 27 0.5 $VC
-i "RandomMove" 28 2 $VC
-i "RandomMove" 31 1.5 $VC
-i "RandomMove" 35 2 $VC
-i "RandomMove" 44 1.5 $VC
-i "RandomMove" 46 1 $VC
-i "RandomMove" 50 1.5 $VC
-i "RandomMove" 54 1 $VC
-i "RandomMove" 57 2 $VC
-i "RandomMove" 60 1.5 $VC
- 
+ ; start wide, everything front slowly come closer - track 67 sec.
+i "StereoSound" 0 1 $PERC 0 120 0.7 0.1 30 0.6; perc A +1, B +2 etc 
 
-e
+
+i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC] 0 30
+
+
+;e
 ;
-
-; perc test
-
-#define PERC_START #0#
-; stereo
-i "StereoSound" $PERC_START 1 [$PERC+6] 0 180
-i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30
-;  
-;i "StereoSound" $PERC_START 1 [$PERC+4] 0 120  
-;i "StereoSound" $PERC_START 1 [$PERC+0] 0 90  
-;i "StereoSound" $PERC_START 1 [$PERC+2] 0 260  
-;i "StereoSound" $PERC_START 1 [$PERC+1] 0 60  
-;i "StereoSound" $PERC_START 1 [$PERC+3] 0 50  
-;i "StereoSound" $PERC_START 1 [$PERC+5] 0 40 0.6 0.15 90  
-;i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+4] 0 30 
-;i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+0] 0 30 
-;i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+2] 0 30 
-;i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+1] 0 30 
-;i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+3] 0 30 
-;i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+5] 0 30 
-;i "StereoSound" 189 1 $VL 12 20 0.60 0.10 27
-
-
-s
-
-
 
 ; part I ---------------------------------------------------
 ;a 0 0 [65+91]
-;x
+x
 ; 1 flute 
 i "StereoSound" 0 1 $FL -10 20 0.6 0.1
 
@@ -413,15 +375,16 @@ i "MonoSound" 0 1 $VC -150 0
 i "MonoSound" 0 1 $CL 150 0
 
 i "StereoSound" 0 1 [100+$PF] 0 90;120
-i "StereoSound" 0 1 [100+$PERC+1] 180 60 ; perc A +1, B +2 etc 
-i "StereoSound" 0 1 [100+$PERC+2] 180 50
-i "StereoSound" 0 1 [100+$PERC+3] 180 40
-i "StereoSound" 0 1 [100+$PERC+4] 0 40 
-i "StereoSound" 0 1 [100+$PERC+5] 0 50 0.6 0.2 90 ; top
-i "StereoSound" 0 1 [100+$PERC+6] 0 60 0.6 0.2 60 ; high
+i "StereoSound" 0 1 [100+$PERC+0] 180 60 ; perc A +1, B +2 etc 
+i "StereoSound" 0 1 [100+$PERC+1] 180 50
+i "StereoSound" 0 1 [100+$PERC+2] 180 40
+i "StereoSound" 0 1 [100+$PERC+3] 0 40 
+i "StereoSound" 0 1 [100+$PERC+4] 0 50 0.6 0.2 90 ; top
+i "StereoSound" 0 1 [100+$PERC+5] 0 60 0.6 0.2 60 ; high
 
 ; movements? tryout: full circle of some perc layers?
 i "CenterAndWidthTo" ^+10 110 [100+$PERC+1] -180 60 ; full circle - seems to work well
+
 
 
 ; 6 Perc solo
@@ -429,19 +392,11 @@ i "CenterAndWidthTo" ^+10 110 [100+$PERC+1] -180 60 ; full circle - seems to wor
 #define PERC_START #120# ; 120 seconds is the ensemble part
 
 ; start wide, everything front slowly come closer - track 67 sec.
-i "StereoSound" $PERC_START 1 [$PERC] 0 120 ; perc A +1, B +2 etc 
-i "StereoSound" . 1 [$PERC+1] 0 90
-i "StereoSound" . 1 [$PERC+2] 0 260 ; so wide that it is back
-i "StereoSound" . 1 [$PERC+3] 0 60 
-i "StereoSound" . 1 [$PERC+4] 0 50 
-i "StereoSound" . 1 [$PERC+5] 0 40 0.6 0.15 90
+i "StereoSound" $PERC_START 1 $PERC 0 120 ; perc A +1, B +2 etc 
+
 
 i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC] 0 30
-i "CenterAndWidthTo" . . [$PERC+1] 0 30
-i "CenterAndWidthTo" . . [$PERC+2] 0 30
-i "CenterAndWidthTo" . . [$PERC+3] 0 30
-i "CenterAndWidthTo" . . [$PERC+4] 0 30
-i "CenterAndWidthTo" . . [$PERC+5] 0 30
+
 
 
 ; 7 cello solo
@@ -627,7 +582,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.50000000</value>
+  <value>0.10000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -688,7 +643,7 @@ e
   <description/>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.70000000</value>
+  <value>0.60000000</value>
   <mode>lin</mode>
   <mouseControl act="">continuous</mouseControl>
   <resolution>0.01000000</resolution>

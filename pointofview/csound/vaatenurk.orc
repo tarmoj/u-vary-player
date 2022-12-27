@@ -27,8 +27,7 @@ gkWidth[] init 14; stereo width
 
 gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-FLUTE.wav", "U_Vaatenurk-ENS-CLARINET.wav","U_Vaatenurk-ENS-VIOLIN.wav", "U_Vaatenurk-ENS-CELLO.wav", "U_Vaatenurk-ENS-PIANO.wav", "U_Vaatenurk-ENS-PERC A.wav", "U_Vaatenurk-ENS-PERC B.wav", "U_Vaatenurk-ENS-PERC C.wav", "U_Vaatenurk-ENS-PERC D.wav", "U_Vaatenurk-ENS-PERC E.wav", "U_Vaatenurk-ENS-PERC F.wav"
 
-gSSolos[] fillarray "U_Vaatenurk-FLUTE.wav", "U_Vaatenurk-CLARINET.wav", "U_Vaatenurk-VIOLIN.wav", "U_Vaatenurk-CELLO.wav", "U_Vaatenurk-PIANO.wav",  
-"Vaatenurk_PERC ALL.wav" 
+gSSolos[] fillarray "U_Vaatenurk-FLUTE.wav", "U_Vaatenurk-CLARINET.wav", "U_Vaatenurk-VIOLIN.wav", "U_Vaatenurk-CELLO.wav", "U_Vaatenurk-PIANO.wav", "U_Vaatenurk-PERC ALL.wav" 
 
 
 giNextVoiceTime[] fillarray 65, 91, 78, 62, 0, 67  ; in seconds - time when the next voice enters. 0 if nothing follows
@@ -145,6 +144,8 @@ instr StereoSound ; tryout for solos
 	iReverbSize = p7>0 ? p7 : 0.6
   iReverbWet = p8>0 ? p8 : 0.1
   iElevation = p9>0 ? p9 :30
+  iAmpCorrection = p10==0 ? 1 : p10
+  print iAmpCorrection
   
   iUseChannel = 0 ; set 1 for testing with sliders 0 otherwise
   
@@ -205,8 +206,8 @@ instr StereoSound ; tryout for solos
   aL2,aR2 hrtfmove2 aR, kAzimuth2 , kElevation2, "hrtf-44100-left.dat","hrtf-44100-right.dat"
   aDeclick linen 1,0.1, p3, 0.1
   
-  aOutL = (aL1+aL2)*aDeclick
-  aOutR = (aR1+aR2)*aDeclick
+  aOutL = (aL1+aL2)*aDeclick*iAmpCorrection
+  aOutR = (aR1+aR2)*aDeclick*iAmpCorrection
   outs aOutL, aOutR
   gaL += aOutL
   gaR += aOutR
@@ -253,9 +254,11 @@ endin
 schedule "Reverb",0, -1
 
 instr Reverb
-	
- kWet chnget "wet"
- kSize chnget "size"
+ ; NB! --------------- FIXED FOR TESTING ------------------- 	PUT BACK!
+ ;kWet chnget "wet"
+ ;kSize chnget "size"
+ kWet init 0.1
+ kSize init 0.7
 	  
  aReverbL, aReverbR freeverb gaL*kWet, gaR*kWet, kSize, 0.6
  outs aReverbL, aReverbR

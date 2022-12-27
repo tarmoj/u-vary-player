@@ -224,15 +224,15 @@ def section(no):
         scoreLines += '''i "StereoSound" 0 1 [100+$PF] 0 90 \n''' # piano always on one sport
 
         # perc -  various layers (instrument) on different positions and heights
-        percIndexes = [2, 3, 4, 5, 6]
+        percIndexes = [1, 2, 3, 4, 5]
         random.shuffle(percIndexes)
-        scoreLines += '''i "StereoSound" 0 1 [100+$PERC+1] 180 60  \n''' # 1 is set, no random position
+        scoreLines += '''i "StereoSound" 0 1 [100+$PERC] 180 60  \n''' # 1 is set, no random position
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 180 50  \n''' % (percIndexes[0])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 180 40  \n''' % (percIndexes[1])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 40  \n''' % (percIndexes[2])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 50 0.6 0.2 90 \n''' % (percIndexes[3])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 60  0.6 0.2 60\n''' % (percIndexes[4])
-        scoreLines += '''i "CenterAndWidthTo" 10 110 [100+$PERC+1] -180 60 \n''' # slow full circle for layer 1
+        scoreLines += '''i "CenterAndWidthTo" 10 110 [100+$PERC] -180 60 \n''' # slow full circle for layer 1
 
 
     if no==6: # old perc   TODO: perc should stay perhaps in the same position...
@@ -240,7 +240,7 @@ def section(no):
         #i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30
         #  different positions for layers every time. start wide, everything front slowly
         scoreLines = '''#define PERC_START #%d#\n''' % (data.percStart)
-        scoreLines += '''i "StereoSound" $PERC_START 1 [$PERC+6] 0 180 0.6 0.15 30  \n'''
+        scoreLines += '''i "StereoSound" $PERC_START 1 $PERC 0 180 0.6 0.15 30  0.6 \n''' # last parameter -  amplitude correction. Somewhat softer this one.
         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30 \n'''
 
         data.lastInstrument = percussion
@@ -331,7 +331,7 @@ def generate():
     
 
 # main --------
-#generate()
+generate()
 #print(section(1))
 #print(section(2))
 #print(section(3))
