@@ -69,27 +69,75 @@ def getInstrument(): # get one random and remove it from freeInstruments
     #print("getInstrument", index, instrument, data.freeInstruments)
     return instrument
 
-def getRandomChange(instrument):
+def getRandomChange(instrument, startTime):
+    lines = "#define START3 #%.1f# \n" % (startTime)
 
     if instrument=="$FL":
         lines = '''
-i "CenterAndWidthTo" 12 2 $FL 90 40
-i "CenterAndWidthTo" 16 1.5 $FL 0 20
-i "CenterAndWidthTo" 24 1.5 $FL -90 60
-i "CenterAndWidthTo" 27 1.5 $FL 45 40
-i "CenterAndWidthTo" 32 0.5 $FL 120 40
-i "CenterAndWidthTo" 34 0.5 $FL 160 60
-i "CenterAndWidthTo" 37 0.5 $FL 180 70
-i "CenterAndWidthTo" 41 4 $FL 210 80
-i "CenterAndWidthTo" 48 2 $FL 260 90
-i "CenterAndWidthTo" 57 3 $FL 180 90
-i "CenterAndWidthTo" 60 3 $FL 120 60
-i "CenterAndWidthTo" 63 3 $FL 180 90 ; check this beginning time!!
+i "RandomMove" [$START3+12] 2 $FL
+i "RandomMove" [$START3+16] 1.5 $FL
+i "RandomMove" [$START3+24] 1.5 $FL
+i "RandomMove" [$START3+27] 1.5 $FL
+i "RandomMove" [$START3+32] 0.5 $FL
+i "RandomMove" [$START3+34] 0.5 $FL
+i "RandomMove" [$START3+37] 0.5 $FL
+i "RandomMove" [$START3+41] 4 $FL
+i "RandomMove" [$START3+48] 2 $FL
+i "RandomMove" [$START3+57] 3 $FL
+i "RandomMove" [$START3+60] 3 $FL
+i "RandomMove" [$START3+60] 3 $FL
 '''
     elif instrument=="$CL":
-        lines = '''
-    
+        lines += '''
+i "RandomMove" [$START3+11] 2 $CL
+i "RandomMove" [$START3+14] 2 $CL
+i "RandomMove" [$START3+27] 2 $CL
+i "RandomMove" [$START3+33] 1.5 $CL
+i "RandomMove" [$START3+38] 1 $CL
+i "RandomMove" [$START3+44] 2.5 $CL
+i "RandomMove" [$START3+53] 3 $CL
+i "RandomMove" [$START3+62] 0.5 $CL
+i "RandomMove" [$START3+65] 0.5 $CL
+i "RandomMove" [$START3+68] 1 $CL
+i "RandomMove" [$START3+72] 4.5 $CL
+i "RandomMove" [$START3+80] 1 $CL
+i "RandomMove" [$START3+84] 2 $CL
+i "RandomMove" [$START3+89] 1 $CL
+i "RandomMove" [$START3+91] 1 $CL
         '''
+    elif instrument=="$VL":
+            lines += '''
+i "RandomMove" [$START3+17] 2 $VL
+i "RandomMove" [$START3+20] 2.5 $VL
+i "RandomMove" [$START3+25] 1.5 $VL
+i "RandomMove" [$START3+29] 1 $VL
+i "RandomMove" [$START3+34] 2.5 $VL
+i "RandomMove" [$START3+40] 1 $VL
+i "RandomMove" [$START3+47] 2 $VL
+i "RandomMove" [$START3+49] 0.5 $VL
+i "RandomMove" [$START3+52] 2 $VL
+i "RandomMove" [$START3+56] 1.5 $VL
+i "RandomMove" [$START3+60] 2 $VL
+i "RandomMove" [$START3+65] 1 $VL
+i "RandomMove" [$START3+67] 0.5 $VL
+i "RandomMove" [$START3+74] 2.5 $VL
+            '''
+    elif instrument=="$VC":
+            lines += '''
+i "RandomMove" [$START3+10] 2 $VC
+i "RandomMove" [$START3+13] 1.5 $VC
+i "RandomMove" [$START3+19] 2.5 $VC
+i "RandomMove" [$START3+27] 0.5 $VC
+i "RandomMove" [$START3+28] 2 $VC
+i "RandomMove" [$START3+31] 1.5 $VC
+i "RandomMove" [$START3+35] 2 $VC
+i "RandomMove" [$START3+44] 1.5 $VC
+i "RandomMove" [$START3+46] 1 $VC
+i "RandomMove" [$START3+50] 1.5 $VC
+i "RandomMove" [$START3+54] 1 $VC
+i "RandomMove" [$START3+57] 2 $VC
+i "RandomMove" [$START3+60] 1.5 $VC
+            '''
     return lines
 
 def section(no):
@@ -144,8 +192,7 @@ def section(no):
         elevation = random.randint(20, 60)
         startTime = data.lastStartTime + data.lastInstrument["follows"][instrument["macro"]]
         scoreLines = '''i "StereoSound" %.1f 1 %s %d %d %.2f %.2f %d\n''' % (startTime, instrument["macro"], degree, width, size, wet, elevation)
-        #scoreLines += '''i "RandomChange" %d %d %s \n''' % (data.nextStartTime, instrument["duration"], instrument["macro"])
-        scoreLines += getRandomChange(instrument["macro"]) # TODO -  add second parameter instrumentStart
+        scoreLines += getRandomChange(instrument["macro"], startTime)
         data.lastInstrument = instrument
         data.lastStartTime = startTime
 
@@ -285,10 +332,6 @@ def generate():
 
 # main --------
 #generate()
-print(section(1))
-print(section(2))
-print(section(3))
-print(section(4))
-print(section(5))
-print(section(6))
-print(section(7))
+#print(section(1))
+#print(section(2))
+#print(section(3))
