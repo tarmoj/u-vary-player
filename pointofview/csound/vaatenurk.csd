@@ -33,17 +33,12 @@ gkWidth[] init 16; stereo width
 ;gSEnsembleParts[] fillarray "Vaatenurk_FLUTE-St.wav", "Vaatenurk_CLARINET-St.wav", "Vaatenurk_VIOLIN-St.wav", "Vaatenurk_CELLO-St.wav", "Vaatenurk_PIANO-St.wav", "Vaatenurk_PERC ALL-St.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav"
 
 ; perc kihid kopeeritud vanast
-gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-Flute.wav", "U_Vaatenurk-ENS-Clarinet.wav","U_Vaatenurk-ENS-Violin.wav", "U_Vaatenurk-ENS-Cello.wav", "U_Vaatenurk-ENS-Piano.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav", 
-"U_Vaatenurk-ENS-Perc.wav"
+gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-FLUTE.wav", "U_Vaatenurk-ENS-CLARINET.wav","U_Vaatenurk-ENS-VIOLIN.wav", "U_Vaatenurk-ENS-CELLO.wav", "U_Vaatenurk-ENS-PIANO.wav", "U_Vaatenurk-ENS-PERC A.wav", "U_Vaatenurk-ENS-PERC B.wav", "U_Vaatenurk-ENS-PERC C.wav", "U_Vaatenurk-ENS-PERC D.wav", "U_Vaatenurk-ENS-PERC E.wav", "U_Vaatenurk-ENS-PERC F.wav"
 
-
-;gSSolos[] fillarray "Vaatenurk_SOOLO_FLUTE-St.wav", "Vaatenurk_SOOLO_CLARINET-St.wav", "Vaatenurk_SOOLO_VIOLIN-St.wav", "Vaatenurk_SOOLO_CELLO-St.wav",  "Vaatenurk_SOOLO_PIANO-St.wav",    "Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", 
-;"Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav"
 
 ; uus
-gSSolos[] fillarray "U_Vaatenurk-SOLO-Flute-3.wav", "U_Vaatenurk-SOLO-Clarinet-3.wav", "U_Vaatenurk-SOLO-Violin-3.wav", "U_Vaatenurk-SOLO-Cello-3.wav", "U_Vaatenurk-SOLO-Piano-3.wav",  
-"Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", "Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav", 
-"U_Vaatenurk-SOLO-Perc-3.wav"
+gSSolos[] fillarray "U_Vaatenurk-FLUTE.wav", "U_Vaatenurk-CLARINET.wav", "U_Vaatenurk-VIOLIN.wav", "U_Vaatenurk-CELLO.wav", "U_Vaatenurk-PIANO.wav",  
+"Vaatenurk_PERC ALL.wav" 
 
 giNextVoiceTime[] fillarray 65, 91, 78, 62, 0, 67  ; in seconds - time when the next voice enters. 0 if nothing follows
 
@@ -109,6 +104,24 @@ instr RandomChange
 	
 	endif
 	
+endin
+
+instr RandomMove
+	iDuration = p3
+	index = p4>=100 ? p4-100 : p4 ;
+	iCenterChange random -160, 160 
+	iWidthChange random 40, 180
+	if iWidthChange<90 then
+		iWidthChange = 0
+	endif
+	if abs(iCenterChange)<60 then ; if smaller than 60, set to 0
+		iCenterChange = 0
+	endif
+
+	iCenter wrap i(gkCenter,index) + iCenterChange, -180, 180
+	iWidth wrap i(gkWidth,index) + iWidthChange, 0, 180 
+	printf_i "New center : %f width: %f duration %f\n", 1, iCenter, iWidth, iDuration
+	schedule "CenterAndWidthTo",0, iDuration, index, iCenter, iWidth	
 endin
 
 instr CenterAndWidthTo
@@ -318,21 +331,24 @@ endin
 #define PERC #5#
 
 ; for testing
+f 0 10
+i "StereoSound" 0 1 $VC 0 90 0.70 0.50 59
 
-i "StereoSound" 0 1 $FL 0 90 0.70 0.50 59
+i "RandomMove" 10 2 $VC
+i "RandomMove" 13 1.5 $VC
+i "RandomMove" 19 2.5 $VC
+i "RandomMove" 27 0.5 $VC
+i "RandomMove" 28 2 $VC
+i "RandomMove" 31 1.5 $VC
+i "RandomMove" 35 2 $VC
+i "RandomMove" 44 1.5 $VC
+i "RandomMove" 46 1 $VC
+i "RandomMove" 50 1.5 $VC
+i "RandomMove" 54 1 $VC
+i "RandomMove" 57 2 $VC
+i "RandomMove" 60 1.5 $VC
+ 
 
-i "CenterAndWidthTo" 12 2 $FL 90 40
-i "CenterAndWidthTo" 16 1.5 $FL 0 20
-i "CenterAndWidthTo" 24 1.5 $FL -90 60
-i "CenterAndWidthTo" 27 1.5 $FL 45 40
-i "CenterAndWidthTo" 32 0.5 $FL 120 40
-i "CenterAndWidthTo" 34 0.5 $FL 160 60
-i "CenterAndWidthTo" 37 0.5 $FL 180 70
-i "CenterAndWidthTo" 41 4 $FL 210 80
-i "CenterAndWidthTo" 48 2 $FL 260 90
-i "CenterAndWidthTo" 57 3 $FL 180 90
-i "CenterAndWidthTo" 60 3 $FL 120 60
-i "CenterAndWidthTo" 60 3 $FL 180 90
 e
 ;
 
