@@ -255,10 +255,10 @@ schedule "Reverb",0, -1
 
 instr Reverb
  ; NB! --------------- FIXED FOR TESTING ------------------- 	PUT BACK!
- ;kWet chnget "wet"
- ;kSize chnget "size"
- kWet init 0.1
- kSize init 0.7
+ kWet chnget "wet"
+ kSize chnget "size"
+ ;kWet init 0.1
+ ;kSize init 0.7
 	  
  aReverbL, aReverbR freeverb gaL*kWet, gaR*kWet, kSize, 0.6
  outs aReverbL, aReverbR

@@ -248,20 +248,25 @@ const start = () => {
         //console.log("Duration: ", pieceInfo.duration);
         if (Tone.Transport.seconds>pieceInfo.duration && Tone.Transport.state==="started") {
             stop();
-            if (!hasListenedAll) {
+
+            if (counter < playbackData[pieceIndex].playList.length) {
                 const newCounter = counter + 1;
-                console.log("Counter now: ", newCounter, counter);
                 if (newCounter < requiredListens) {
-                    setStoredCounter(playbackData[pieceIndex].uid, newCounter);
-                    counter = newCounter;
-                    setTimeout(() => {
-                        preparePlayback(pieceIndex, newCounter); // load data for next version automatically
-                        requirePlayback = true; // singal to play when loaded
-                        }, 200); // give some time to stop
+                    hasListenedAll = false; // this variable probably not necessary any more.
                 } else {
+                    hasListenedAll = true;
                     lastTimeReaction();
-                    console.log("Counter would be out of range: ", counter, playbackData[pieceIndex].playList.length);
                 }
+
+                setStoredCounter(playbackData[pieceIndex].uid, newCounter);
+                counter = newCounter;
+                setTimeout(() => {
+                    preparePlayback(pieceIndex, newCounter); // load data for next version automatically
+                    requirePlayback = true; // singal to play when loaded
+                }, 200); // give some time to stop
+
+            } else {
+                console.log("Counter out of range: ", counter, playbackData[pieceIndex].playList.length);
             }
         }
     }, 1);
