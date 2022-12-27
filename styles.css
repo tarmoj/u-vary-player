@@ -156,7 +156,7 @@ progress::-webkit-progress-value {
 
 .Row {
   display: grid;
-  grid-template-columns: auto 2fr 1fr;
+  grid-template-columns: auto 2fr 1.5fr;
   gap: 32px;
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   height: 296px;
@@ -247,7 +247,8 @@ progress::-webkit-progress-value {
   top: -75vw;
   transform: rotate(90deg);
   z-index: -1;
-  opacity: 0.3;
+  opacity: 0.4;
+  filter: blur(30px);
 }
 .Content {
   display: flex;
@@ -437,5 +438,9 @@ progress::-webkit-progress-value {
 @media (max-width: 800px) {
   .Links {
     grid-template-columns: 1fr;
+  }
+  .Links > a > h3 {
+    font-size: 24px;
+    font-weight: 600;
   }
 }

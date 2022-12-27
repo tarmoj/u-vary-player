@@ -65,27 +65,53 @@
       <progress id="playbackProgress" step="any"></progress>
       <div id="infoDiv">
         <small>
-          <div class="text">There are several versions of this piece. After listening to the whole track without stopping, you get to hear the next version.</div>
-          <div class="text">After listening to 6 versions compiled by the author, a menu opens and you can pick any version from the list or create a random mix.</div>
+          <div class="text">
+            There are several versions of this piece. After listening to the
+            whole track without stopping, you get to hear the next version.
+          </div>
+          <div class="text">
+            After listening to 6 versions compiled by the author, a menu opens
+            and you can pick any version from the list or create a random mix.
+          </div>
         </small>
         <br />
         <div>
-          You have listened to the entire piece <span id="counterSpan">N</span> times. Version: <span id="versionSpan"></span>
+          You have listened to the entire piece
+          <span id="counterSpan">N</span> times. Version:
+          <span id="versionSpan"></span>
         </div>
       </div>
-      <p><small><i>
-        For testing (temporary):
-        <button onclick='document.querySelector("#menuDiv").style.visibility="visible"'>Show menu</button>
-      </i></small>
+      <p>
+        <small
+          ><i>
+            For testing (temporary):
+            <button
+              onclick='document.querySelector("#menuDiv").style.visibility="visible"'
+            >
+              Show menu
+            </button>
+          </i></small
+        >
       </p>
       <div id="menuDiv" style="visibility: hidden">
         <div>
           <b>You have listened to all required versions. Thank you!</b><br />
-          Now you can select the version you want to hear from the menu below or create a new random mix:
+          Now you can select the version you want to hear from the menu below or
+          create a new random mix:
         </div>
         <select id="versionSelect" hidden></select>
         <div class="Grid" id="versionGrid"></div>
       </div>
+      <br /><br />
+      <p class="text">
+        Above could mean here something like - over, on high; overhead: the
+        clouds above, in heaven; heavenward, in or to a higher place than; over,
+        higher up, upwards. Based on material I developed in 2011-2012. The
+        score consists of 6 “voices” and is for 2 or more instruments covering a
+        certain pitch range. After testing different combinations, 6
+        combinations were chosen for presentation in the web environment.
+      </p>
+      <br /><br />
     </div>
   </body>
 </html>
