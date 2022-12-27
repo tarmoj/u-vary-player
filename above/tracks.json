@@ -40,19 +40,8 @@
     ],
 
     "playList": [
-      { 	"counter": 0,
-        "name": "Full ensemble 1",
-        "tracks": [
-          { "name": "Violin 1", "pan": -0.44, "volume": -10},
-          { "name": "Clarinet 2", "pan": 0, "volume": 0},
-          { "name": "Vibraphone 3", "pan": 0.44, "volume": 0},
-          { "name": "Cello 4", "pan": 0.1, "volume": -15},
-          { "name": "Violin 5", "pan": -0.34, "volume": -15},
-          { "name": "Synth 6", "pan": 0.34, "volume": -5}
-        ]
-      },
 
-      { 	"counter": 1,
+      { 	"counter": 0,
         "name": "Vibraphone + Clarinet",
         "tracks": [
           { "name": "Vibraphone 1", "pan": -0.4, "volume": 0},
@@ -64,19 +53,19 @@
         ]
       },
 
-      { 	"counter": 2,
-        "name": "Full Ensemble 2",
+      { 	"counter": 1,
+        "name": "Full Ensemble 1",
         "tracks": [
-          { "name": "Vibraphone 1", "pan": 0, "volume": -14},
+          { "name": "Violin 1", "pan": -0.44, "volume": -10},
           { "name": "Clarinet 2", "pan": 0, "volume": 0},
-          { "name": "Flute 3", "pan": -0.3, "volume": -10},
-          { "name": "Violin 4", "pan": 0.3, "volume": -20},
-          { "name": "Synth 5", "pan": 0.3, "volume": -20},
-          { "name": "Cello 6", "pan": -0.3, "volume": -20}
+          { "name": "Vibraphone 3", "pan": 0.44, "volume": 0},
+          { "name": "Cello 4", "pan": 0.1, "volume": -15},
+          { "name": "Violin 5", "pan": -0.34, "volume": -15},
+          { "name": "Synth 6", "pan": 0.34, "volume": -5}
         ]
       },
 
-      { 	"counter": 3,
+      { 	"counter": 2,
         "name": "Wind",
         "tracks": [
           { "name": "Flute 1", "volume": -5, "pan": 0 },
@@ -88,8 +77,30 @@
         ]
       },
 
+      { 	"counter": 3,
+        "name": "Full Ensemble 2",
+        "tracks": [
+          { "name": "Vibraphone 1", "pan": 0, "volume": -14},
+          { "name": "Clarinet 2", "pan": 0, "volume": 0},
+          { "name": "Flute 3", "pan": -0.3, "volume": -10},
+          { "name": "Violin 4", "pan": 0.3, "volume": -20},
+          { "name": "Synth 5", "pan": 0.3, "volume": -20},
+          { "name": "Cello 6", "pan": -0.3, "volume": -20}
+        ]
+      },
 
       { 	"counter": 4,
+        "name": "Synth",
+        "tracks": [
+          { "name": "Synth 1", "volume": -10, "pan": 0.16 },
+          { "name": "Synth 2", "volume": -10, "pan": 0 },
+          { "name": "Vibraphone 3", "volume": 0, "pan": 0.44},
+          { "name": "Vibraphone 4", "volume": 0, "pan": 0.44},
+          { "name": "Synth 6", "volume": -10, "pan": 0}
+        ]
+      },
+
+      { 	"counter": 5,
         "name": "Full Ensemble 3",
         "tracks": [
           { "name": "Vibraphone 1", "volume": -6, "pan": 0 },
@@ -99,21 +110,7 @@
           { "name": "Violin 5", "volume": -20, "pan": -0.34},
           { "name": "Clarinet 6", "volume": 0, "pan": 0.34}
         ]
-      },
-
-
-      { 	"counter": 5,
-        "name": "Synth",
-        "tracks": [
-          { "name": "Synth 1", "volume": -10, "pan": 0.16 },
-          { "name": "Synth 2", "volume": -10, "pan": 0 },
-          { "name": "Vibraphone 3", "volume": 0, "pan": 0.44},
-          { "name": "Vibraphone 4", "volume": 0, "pan": 0.44},
-          { "name": "Synth 6", "volume": -10, "pan": 0}
-        ]
       }
-
-
     ]
 
   }
