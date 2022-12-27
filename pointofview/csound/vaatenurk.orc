@@ -25,21 +25,10 @@ gkCenter[] init 14 ; center of stereo
 gkWidth[] init 14; stereo width
 
 
-; vana
-;gSEnsembleParts[] fillarray "Vaatenurk_FLUTE-St.wav", "Vaatenurk_CLARINET-St.wav", "Vaatenurk_VIOLIN-St.wav", "Vaatenurk_CELLO-St.wav", "Vaatenurk_PIANO-St.wav", "Vaatenurk_PERC ALL-St.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav"
+gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-FLUTE.wav", "U_Vaatenurk-ENS-CLARINET.wav","U_Vaatenurk-ENS-VIOLIN.wav", "U_Vaatenurk-ENS-CELLO.wav", "U_Vaatenurk-ENS-PIANO.wav", "U_Vaatenurk-ENS-PERC A.wav", "U_Vaatenurk-ENS-PERC B.wav", "U_Vaatenurk-ENS-PERC C.wav", "U_Vaatenurk-ENS-PERC D.wav", "U_Vaatenurk-ENS-PERC E.wav", "U_Vaatenurk-ENS-PERC F.wav"
 
-; perc kihid kopeeritud vanast
-gSEnsembleParts[] fillarray "U_Vaatenurk-ENS-Flute.wav", "U_Vaatenurk-ENS-Clarinet.wav","U_Vaatenurk-ENS-Violin.wav", "U_Vaatenurk-ENS-Cello.wav", "U_Vaatenurk-ENS-Piano.wav", "Vaatenurk_PERC A-St.wav", "Vaatenurk_PERC B-St.wav", "Vaatenurk_PERC C-St.wav", "Vaatenurk_PERC D-St.wav", "Vaatenurk_PERC E-St.wav", "Vaatenurk_PERC F-St.wav", 
-"U_Vaatenurk-ENS-Perc.wav"
+gSSolos[] fillarray "U_Vaatenurk-FLUTE.wav", "U_Vaatenurk-CLARINET.wav", "U_Vaatenurk-VIOLIN.wav", "U_Vaatenurk-CELLO.wav", "U_Vaatenurk-PIANO.wav", "U_Vaatenurk-PERC ALL.wav" 
 
-
-;gSSolos[] fillarray "Vaatenurk_SOOLO_FLUTE-St.wav", "Vaatenurk_SOOLO_CLARINET-St.wav", "Vaatenurk_SOOLO_VIOLIN-St.wav", "Vaatenurk_SOOLO_CELLO-St.wav",  "Vaatenurk_SOOLO_PIANO-St.wav",    "Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", 
-;"Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav"
-
-; uus
-gSSolos[] fillarray "U_Vaatenurk-SOLO-Flute-3.wav", "U_Vaatenurk-SOLO-Clarinet-3.wav", "U_Vaatenurk-SOLO-Violin-3.wav", "U_Vaatenurk-SOLO-Cello-3.wav", "U_Vaatenurk-SOLO-Piano-3.wav",  
-"Vaatenurk_SOOLO_PERC A-St.wav" , "Vaatenurk_SOOLO_PERC B-St.wav", "Vaatenurk_SOOLO_PERC C-St.wav",   "Vaatenurk_SOOLO_PERC D-St.wav", "Vaatenurk_SOOLO_PERC E-St.wav", "Vaatenurk_SOOLO_PERC G-St.wav", 
-"U_Vaatenurk-SOLO-Perc-3.wav"
 
 giNextVoiceTime[] fillarray 65, 91, 78, 62, 0, 67  ; in seconds - time when the next voice enters. 0 if nothing follows
 
@@ -49,21 +38,8 @@ giFirstSoloTable = 200
 gaL init 0
 gaR init 0
 
-;schedule "LoadAudio", 0,0 - takes ages to load.. don't use
-instr LoadAudio ; into tables
-	index = 0
-	while index < lenarray(gSEnsembleParts) do
-		iTable ftgen giFirstEnsembleTable+index,0, 0, 1, gSEnsembleParts[index], 0,0,0
-		index += 1
-	od
-	index = 0
-	while index < 5 do
-		iTable ftgen giFirstSoloTable+index,0, 0, 1, gSSolos[index], 0,0,0
-		index += 1
-	od
-endin
 
-instr RandomChange
+instr RandomChange ; use metro to generate random changes in random intervals
 	iDuration = p3
 	index = p4>=100 ? p4-100 : p4 ; perhaps negative when channel must be used
 	
@@ -105,6 +81,24 @@ instr RandomChange
 	
 	endif
 	
+endin
+
+instr RandomMove
+	iDuration = p3
+	index = p4>=100 ? p4-100 : p4 ;
+	iCenterChange random -160, 160 
+	iWidthChange random 40, 180
+	if iWidthChange<90 then
+		iWidthChange = 0
+	endif
+	if abs(iCenterChange)<60 then ; if smaller than 60, set to 0
+		iCenterChange = 0
+	endif
+
+	iCenter wrap i(gkCenter,index) + iCenterChange, -180, 180
+	iWidth wrap i(gkWidth,index) + iWidthChange, 0, 180 
+	printf_i "New center : %f width: %f duration %f\n", 1, iCenter, iWidth, iDuration
+	schedule "CenterAndWidthTo",0, iDuration, index, iCenter, iWidth	
 endin
 
 instr CenterAndWidthTo
@@ -150,6 +144,8 @@ instr StereoSound ; tryout for solos
 	iReverbSize = p7>0 ? p7 : 0.6
   iReverbWet = p8>0 ? p8 : 0.1
   iElevation = p9>0 ? p9 :30
+  iAmpCorrection = p10==0 ? 1 : p10
+  print iAmpCorrection
   
   iUseChannel = 0 ; set 1 for testing with sliders 0 otherwise
   
@@ -210,8 +206,8 @@ instr StereoSound ; tryout for solos
   aL2,aR2 hrtfmove2 aR, kAzimuth2 , kElevation2, "hrtf-44100-left.dat","hrtf-44100-right.dat"
   aDeclick linen 1,0.1, p3, 0.1
   
-  aOutL = (aL1+aL2)*aDeclick
-  aOutR = (aR1+aR2)*aDeclick
+  aOutL = (aL1+aL2)*aDeclick*iAmpCorrection
+  aOutR = (aR1+aR2)*aDeclick*iAmpCorrection
   outs aOutL, aOutR
   gaL += aOutL
   gaR += aOutR
@@ -258,9 +254,11 @@ endin
 schedule "Reverb",0, -1
 
 instr Reverb
-	
- kWet chnget "wet"
- kSize chnget "size"
+ ; NB! --------------- FIXED FOR TESTING ------------------- 	PUT BACK!
+ ;kWet chnget "wet"
+ ;kSize chnget "size"
+ kWet init 0.1
+ kSize init 0.7
 	  
  aReverbL, aReverbR freeverb gaL*kWet, gaR*kWet, kSize, 0.6
  outs aReverbL, aReverbR
