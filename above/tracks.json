@@ -246,8 +246,8 @@
           { "name": "Piano 1", "pan": -0.08, "volume": -6},
           { "name": "Synth 2", "pan": 0.80, "volume": 0},
           { "name": "Cello 3", "pan": 0.38, "volume": -3},
-          { "name": "Violin 4", "pan": -0.5, "volume": 0},
-          { "name": "Violin 5", "pan": -0.8, "volume": -4},
+          { "name": "Violin 4", "pan":  0.2, "volume": -6},
+          { "name": "Violin 5", "pan": -0.2, "volume": -9},
           { "name": "Clarinet 6", "pan": 0, "volume": 0}
         ]
       }

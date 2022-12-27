@@ -13,6 +13,7 @@ const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Lef
 const requiredListens = 6; // UPDATE, if necessary
 
 
+
 async function resumeAudio() {
     await Tone.context.resume(); //newer syntax: Tone.getContext().resume();
     console.log("Audio resume");
@@ -141,10 +142,14 @@ const dispose = (pieceIndex=0, playListIndex=0) => {
             if (track.hasOwnProperty("channel") && track.channel && track.player) {
                 console.log("Trying to dispose: ", track.name, track.channel);
 
-                if (track.channel) track.channel.dispose(); // this is not enough, it seems
+                if (track.channel) {
+                    track.channel.dispose(); // this is not enough, it seems
+                    track.channel = null; // probably wrong thing to do
+                }
                 if (track.player) {
                     track.player.unsync(); // for any case
                     track.player.dispose();
+                    track.player = null;
                 }
             }
         }
