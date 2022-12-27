@@ -77,7 +77,7 @@
       },
 
       { 	"counter": 3,
-        "name": "Winds",
+        "name": "Wind",
         "tracks": [
           { "name": "Flute 1", "volume": -5, "pan": 0 },
           { "name": "Clarinet 2", "volume": -5, "pan": -0.2 },
@@ -111,19 +111,8 @@
           { "name": "Vibraphone 4", "volume": 0, "pan": 0.44},
           { "name": "Synth 6", "volume": -10, "pan": 0}
         ]
-      },
-
-      { 	"counter": 6,
-        "name": "Sextet",
-        "tracks": [
-          { "name": "Vibraphone 1", "volume": -10, "pan": 0.2 },
-          { "name": "Synth 2", "volume": -8, "pan": -0.66 },
-          { "name": "Cello 3", "volume": 6, "pan": 0.74},
-          { "name": "Flute 4", "volume": -6, "pan": 0},
-          { "name": "Violin 5", "volume": -6, "pan": -0.68},
-          { "name": "Synth 6", "volume": 0, "pan": 0}
-        ]
       }
+
 
     ]
 

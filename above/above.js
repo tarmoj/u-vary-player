@@ -10,7 +10,7 @@ let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
 let requirePlayback = false; // for starting playback after one version has ended and new will be loaded
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
-const requiredListens = 5; // UPDATE, if necessary
+const requiredListens = 6; // UPDATE, if necessary
 
 
 async function resumeAudio() {
@@ -135,12 +135,17 @@ function getSoundfile(name, piece=pieceIndex) {
 }
 
 const dispose = (pieceIndex=0, playListIndex=0) => {
+    console.log("Dispose playlist, trakcs: ", playListIndex, playbackData[pieceIndex].playList[playListIndex].tracks);
     if (playbackData[pieceIndex].playList[playListIndex]) {
         for (let track of playbackData[pieceIndex].playList[playListIndex].tracks) {
             if (track.hasOwnProperty("channel") && track.channel && track.player) {
                 console.log("Trying to dispose: ", track.name, track.channel);
-                if (track.channel) track.channel.dispose();
-                if (track.player) track.player.dispose();
+
+                if (track.channel) track.channel.dispose(); // this is not enough, it seems
+                if (track.player) {
+                    track.player.unsync(); // for any case
+                    track.player.dispose();
+                }
             }
         }
     }
