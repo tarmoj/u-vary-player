@@ -247,7 +247,7 @@ progress::-webkit-progress-value {
   top: -75vw;
   transform: rotate(90deg);
   z-index: -1;
-  opacity: 0.3;
+  opacity: 0.4;
 }
 .Content {
   display: flex;
