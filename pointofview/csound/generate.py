@@ -154,8 +154,8 @@ def section(no):
         if abs(degree)==15:
             degree += 180 # on some rare cases move to back
         width = 20
-        size = 0.6 # reverb
-        wet = 0.1 # võibolla kitsa puhl suurem
+        size = 0.7 # reverb
+        wet = 0.15 # võibolla kitsa puhl suurem
         elevation = random.randint(20, 60)
         scoreLines = '''i "StereoSound" 0 1 %s %d %d %.2f %.2f %d\n''' % (instrument["macro"], degree, width, size, wet, elevation)
         data.lastInstrument = instrument
@@ -168,7 +168,7 @@ def section(no):
         if data.firstDegree>=0: # if flute was right, move clarinet to left
             degree = -degree
         width = 60
-        size = 0.8 # reverb
+        size = 0.7 # reverb
         wet = 0.1
         elevation = random.randint(20, 60)
         print(data.lastInstrument["macro"], data.lastInstrument["follows"][instrument["macro"]])
@@ -188,7 +188,7 @@ def section(no):
         degree = 0
         width = 90
         size = 0.7 # reverb
-        wet = 0.5
+        wet = 0.1
         elevation = random.randint(20, 60)
         startTime = data.lastStartTime + data.lastInstrument["follows"][instrument["macro"]]
         scoreLines = '''i "StereoSound" %.1f 1 %s %d %d %.2f %.2f %d\n''' % (startTime, instrument["macro"], degree, width, size, wet, elevation)
@@ -230,8 +230,8 @@ def section(no):
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 180 50  \n''' % (percIndexes[0])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 180 40  \n''' % (percIndexes[1])
         scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 40  \n''' % (percIndexes[2])
-        scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 50 0.6 0.2 90 \n''' % (percIndexes[3])
-        scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 60  0.6 0.2 60\n''' % (percIndexes[4])
+        scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 50 0.7 0.1 90 \n''' % (percIndexes[3])
+        scoreLines += '''i "StereoSound" 0 1 [100+$PERC+%d] 0 60  0.7 0.1 60\n''' % (percIndexes[4])
         scoreLines += '''i "CenterAndWidthTo" 10 110 [100+$PERC] -180 60 \n''' # slow full circle for layer 1
 
 
@@ -240,7 +240,7 @@ def section(no):
         #i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30
         #  different positions for layers every time. start wide, everything front slowly
         scoreLines = '''#define PERC_START #%d#\n''' % (data.percStart)
-        scoreLines += '''i "StereoSound" $PERC_START 1 $PERC 0 180 0.6 0.15 30  0.6 \n''' # last parameter -  amplitude correction. Somewhat softer this one.
+        scoreLines += '''i "StereoSound" $PERC_START 1 $PERC 0 180 0.7 0.1 30  0.6 \n''' # last parameter -  amplitude correction. Somewhat softer this one.
         scoreLines += '''i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC+6] 0 30 \n'''
 
         data.lastInstrument = percussion
@@ -253,8 +253,8 @@ def section(no):
         print("Section 7: ", instrument["macro"])
         degree = -data.firstDegree
         width = 20
-        size = 0.6 # reverb
-        wet = 0.1
+        size = 0.7 # reverb
+        wet = 0.3 # more for the last one to get more reverb
         elevation = random.randint(20, 40)
         startTime = data.lastStartTime + percussion["nextVoiceTime"]
         scoreLines = '''i "StereoSound" %.1f 1 %s %d %d %.2f %.2f %d\n''' % (startTime, instrument["macro"], degree, width, size, wet, elevation)

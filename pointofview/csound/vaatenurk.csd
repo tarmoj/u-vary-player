@@ -305,10 +305,10 @@ schedule "Reverb",0, -1
 instr Reverb
 	
  ; NB! --------------- FIXED FOR TESTING ------------------- 	PUT BACK!
- ;kWet chnget "wet"
- ;kSize chnget "size"
- kWet init 0.1
- kSize init 0.7
+ kWet chnget "wet"
+ kSize chnget "size"
+; kWet init 0.3
+; kSize init 0.7
 
 	  
  aReverbL, aReverbR freeverb gaL*kWet, gaR*kWet, kSize, 0.6
@@ -331,13 +331,12 @@ endin
 ; for testing
 
  ; start wide, everything front slowly come closer - track 67 sec.
-i "StereoSound" 0 1 $PERC 0 120 0.7 0.1 30 0.6; perc A +1, B +2 etc 
+
+i "StereoSound" 0 1 $VC -8 20 0.60 0.10 34
 
 
-i "CenterAndWidthTo" [$PERC_START+10] 50 [$PERC] 0 30
 
-
-;e
+e
 ;
 
 ; part I ---------------------------------------------------
@@ -419,6 +418,10 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+
+
+
+
 
 
 

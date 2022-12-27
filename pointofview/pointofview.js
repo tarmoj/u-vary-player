@@ -8,7 +8,7 @@ const progress = document.getElementById("progress");
 const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
-const numberOfVersions = 7 ; // how many generated audio file pairs (partI-partII) NB! update
+const numberOfVersions = 5 ; // how many generated audio file pairs (partI-partII) NB! update
 
 
 const volumetoggle = document.getElementById("volumetoggle");
