@@ -8,7 +8,7 @@ const progress = document.getElementById("progress");
 const timestamp = document.getElementById("timestamp");
 const current = document.getElementById("current");
 
-const numberOfVersions = 5 ; // how many generated audio file pairs (partI-partII) NB! update
+const numberOfVersions = 90 ; // how many generated audio file pairs (partI-partII) NB! update
 
 
 const volumetoggle = document.getElementById("volumetoggle");
@@ -71,7 +71,9 @@ function setVersion() {
 }
 
 function load(part=1) { // part - 1 | 2
-  let source = (part==1) ? `sounds/${currentVersion}-I.mp3` : `sounds/${currentVersion}-II.mp3`;
+  // local:
+  //let source = (part==1) ? `sounds/${currentVersion}-I.mp3` : `sounds/${currentVersion}-II.mp3`;
+  let source = "https://uuu.ee/player/pointofview/sounds/" +  ( (part==1) ? `${currentVersion}-I.mp3` : `${currentVersion}-II.mp3`);
   console.log("New source", source);
   isLoaded = false;
   audio.src = source;
@@ -103,7 +105,7 @@ audio.addEventListener("canplay", () => {
   }
   isLoaded = true;
   timestamp.innerHTML = "00:00";
-  current.innerHTML = `Part ${currentPart}.  <small><i>Fort testing: version ${currentVersion} </i></small>`;
+  current.innerHTML = `Part ${currentPart}  <span hidden><small><i>Fort testing: version ${currentVersion} </i></small></span>`;
 });
 
 audio.addEventListener("loadedmetadata", () => {

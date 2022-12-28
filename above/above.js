@@ -293,6 +293,7 @@ const lastTimeReaction = () => {
     console.log("This was the last available version. Now you can choose whichever you want");
     hasListenedAll = true;
     document.querySelector("#menuDiv").style.display= 'block';
+
 }
 
 const isPlaying = () => lightAudio ? !audio.paused : Tone.Transport.state==="started";
