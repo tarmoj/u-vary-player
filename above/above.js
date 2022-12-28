@@ -8,7 +8,10 @@ let playbackData = null, pieceInfo = null, reverb=null, gainNode=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
 let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
+let isLoaded = false;
 let requirePlayback = false; // for starting playback after one version has ended and new will be loaded
+let audio = null;
+let lightAudio = true; // weather to use audio element ot Tone.js
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
 const requiredListens = 6; // UPDATE, if necessary
 
@@ -31,8 +34,21 @@ function init() {
     }
 
     const volume = parseFloat(document.querySelector("#volumeSlider").value);
-    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toMaster(); // ver 14: toDestination(); //
-    reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
+    if ( lightAudio) {
+        audio = new Audio();
+        audio.oncanplay = () => {
+            setLoaded(true);
+            if (requirePlayback) {
+                requirePlayback = false;
+                start(); // maybe start and play have to be different as in pointofview
+            }
+            console.log("Loaded");
+        }
+    } else { // TONE
+        gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toMaster(); // ver 14: toDestination(); //
+        reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
+    }
+
     preparePlayback(0, counter); // load tracks, dispose old etc
 
     // UI operations
@@ -48,25 +64,23 @@ function init() {
     stopButton.style.opacity = 0.2;
     playbackProgress.style.display = "none";
 
-    // TODO: 
-    // here one example of load progress works with Tone.js r13 but not r14
-    Tone.Buffer.on("progress",  (value) => {
-        progress = Math.round(value * 100);
-        time.innerHTML = "Loading... " + progress + "%";
-        loadingProgress.value = progress;
-        if (progress === 100) {
-            loadingProgress.style.display = 'none';
-            playbackProgress.style.display = 'block';
-            time.innerHTML = '00:00'
-        }
-    });
-
-
+    if (!lightAudio) {
+        Tone.Buffer.on("progress", (value) => {
+            progress = Math.round(value * 100);
+            time.innerHTML = "Loading... " + progress + "%";
+            loadingProgress.value = progress;
+            if (progress === 100) {
+                loadingProgress.style.display = 'none';
+                playbackProgress.style.display = 'block';
+                time.innerHTML = '00:00'
+            }
+        });
+    }
 
 }
 
 
-function loadTracksJson() {
+function loadTracksJson() {  // for Tone
     // if several pieces, get stored pieceIndex here.
     fetch("tracks.json")
         .then((res) => res.json())
@@ -75,6 +89,16 @@ function loadTracksJson() {
             console.log("Loaded json object: ", data);
             init();
         })
+}
+
+function loadAudio(source) { // for audio element
+    if (audio) {
+        console.log("Loading: ", source);
+        audio.src = source;
+        audio.load();
+        setLoaded(false);
+    }
+
 }
 
 
@@ -117,7 +141,6 @@ function createPlayer(soundFile) {
                     start();
                 }
             }
-
         }
     }).sync().start();
     return newPlayer;
@@ -194,21 +217,17 @@ function createRandomPlaylist(voices=6) { // creates and adds a random playlist 
 }
 
 const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  later: take it from pieceIndex
+
     if (!playbackData) return;
     console.log("preparePlayback", pieceIndex, playListIndex);
 
-    if (Tone.Transport.state !==  "stopped") {
+    if ((lightAudio && audio.paused) || ( !lightAudio && Tone.Transport.state !==  "stopped")) {
         stop();
     }
 
     setLoaded(false);
 
-    // release memory of old tracks
-    // TODO: bug on disposing Random tracks!
-    console.log("playlist: current, index", playbackData.currentPlaylist, playListIndex)
-    if (playbackData.currentPlaylist ) {
-        dispose(pieceIndex, playbackData.currentPlaylist); // clear old buffers
-    }
+
 
     pieceInfo = {
         title:playbackData[pieceIndex].title,
@@ -221,15 +240,25 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
     loadedCounter = 0;
 
-    const activeTracks = playbackData[pieceIndex].playList[playListIndex].tracks;
-    console.log("Should start playing: ", activeTracks);
-    for (let track of activeTracks) {
-        const soundFile = getSoundfile(track.name, pieceIndex);
-        if (soundFile) {
-            track.channel = createChannel(track.volume, track.pan);
-            track.player = createPlayer(soundFile);
-            track.player.connect(track.channel);
+    if (!lightAudio) {
+        console.log("playlist: current, index", playbackData.currentPlaylist, playListIndex);
+        if (playbackData.currentPlaylist) {
+            dispose(pieceIndex, playbackData.currentPlaylist); // clear old buffers
         }
+
+        const activeTracks = playbackData[pieceIndex].playList[playListIndex].tracks;
+        console.log("Should start playing: ", activeTracks);
+        for (let track of activeTracks) {
+            const soundFile = getSoundfile(track.name, pieceIndex);
+            if (soundFile) {
+                track.channel = createChannel(track.volume, track.pan);
+                track.player = createPlayer(soundFile);
+                track.player.connect(track.channel);
+            }
+        }
+    } else {
+        const source = `versions/above${playListIndex+1}.mp3`;
+        loadAudio(source);
     }
 
     playbackData.currentPlaylist = playListIndex;
@@ -247,36 +276,46 @@ const start = () => {
         resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
     }
     console.log("Start");
-    Tone.Transport.start();
-    const id =  Tone.Transport.scheduleRepeat(() => {
-        setTime( Math.floor(Tone.Transport.seconds));
-        //console.log("Duration: ", pieceInfo.duration);
-        if (Tone.Transport.seconds>pieceInfo.duration && Tone.Transport.state==="started") {
-            stop();
-
-            if (counter < playbackData[pieceIndex].playList.length) {
-                const newCounter = counter + 1;
-                if (newCounter < requiredListens) {
-                    hasListenedAll = false; // this variable probably not necessary any more.
-                } else {
-                    hasListenedAll = true;
-                    lastTimeReaction();
-                }
-
-                setStoredCounter(playbackData[pieceIndex].uid, newCounter);
-                counter = newCounter;
-                setTimeout(() => {
-                    preparePlayback(pieceIndex, newCounter); // load data for next version automatically
-                    requirePlayback = true; // singal to play when loaded
-                }, 200); // give some time to stop
-
-            } else {
-                console.log("Counter out of range: ", counter, playbackData[pieceIndex].playList.length);
-            }
+    if (lightAudio) {
+        if (isLoaded) {
+            audio.play();
+        } else {
+            requirePlayback = true;
         }
-    }, 1);
-    console.log("Created timer: ", id);
-    timerID = id;
+        // need several conditions and a timer here too
+    } else {
+        Tone.Transport.start();
+        const id =  Tone.Transport.scheduleRepeat(() => {
+            setTime( Math.floor(Tone.Transport.seconds));
+            //console.log("Duration: ", pieceInfo.duration);
+            if (Tone.Transport.seconds>pieceInfo.duration && Tone.Transport.state==="started") {
+                stop();
+
+                if (counter < playbackData[pieceIndex].playList.length) {
+                    const newCounter = counter + 1;
+                    if (newCounter < requiredListens) {
+                        hasListenedAll = false; // this variable probably not necessary any more.
+                    } else {
+                        hasListenedAll = true;
+                        lastTimeReaction();
+                    }
+
+                    setStoredCounter(playbackData[pieceIndex].uid, newCounter);
+                    counter = newCounter;
+                    setTimeout(() => {
+                        preparePlayback(pieceIndex, newCounter); // load data for next version automatically
+                        requirePlayback = true; // singal to play when loaded
+                    }, 200); // give some time to stop
+
+                } else {
+                    console.log("Counter out of range: ", counter, playbackData[pieceIndex].playList.length);
+                }
+            }
+        }, 1);
+        console.log("Created timer: ", id);
+        timerID = id;
+    }
+
 
     const playbackProgress = document.querySelector("#playbackProgress")
     playbackProgress.max = playbackData[pieceIndex].duration
@@ -288,7 +327,11 @@ const start = () => {
 }
 
 const pause = () => {
-    Tone.Transport.pause();
+    if (lightAudio) {
+        audio.pause();
+    } else {
+        Tone.Transport.pause();
+    }
     // UI operations
     playButton.style.display = "block";
     pauseButton.style.display = "none";
@@ -296,8 +339,14 @@ const pause = () => {
 
 const stop = () => {
     console.log("Stop");
-    Tone.Transport.stop();
-    Tone.Transport.clear(timerID);
+    if (lightAudio) {
+        pause();
+        audio.currentTime = 0;
+    } else {
+        Tone.Transport.stop();
+        Tone.Transport.clear(timerID);
+    }
+
     setTime(0);
     // UI operations
     playButton.style.display = "block";
@@ -307,6 +356,9 @@ const stop = () => {
 function setVolume(value) {
     if (gainNode) {
         gainNode.gain.rampTo(value, 0.05);
+    }
+    if (audio) {
+        audio.volume = value; // is it the same scale?
     }
 }
 
@@ -330,6 +382,7 @@ function setTime(seconds) {
 
 function setLoaded(loaded) {
     console.log("Loaded: ", loaded);
+    isLoaded = loaded;
     if (!loaded) {
         document.querySelector("#playButton").disabled = true;
         document.querySelector("#time").innerHTML = "Loading ..."
