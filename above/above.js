@@ -23,6 +23,10 @@ async function resumeAudio() {
     audioResumed = true;
 }
 
+function initAudio() {
+
+}
+
 function init() {
     hasListenedAll = false;
 
@@ -37,7 +41,6 @@ function init() {
     if ( lightAudio) {
         audio = new Audio();
         audio.oncanplay = () => {
-            console.log("Can play");
             setLoaded(true);
             if (requirePlayback) {
                 requirePlayback = false;
@@ -90,6 +93,11 @@ function init() {
         });
     }
 
+}
+
+function useLightAudio(light) {
+    lightAudio = light;
+    init(); // this is not right, it should deal only with audio part. figure out about globals/locals like volume && progresses etc
 }
 
 
@@ -147,7 +155,7 @@ function createPlayer(soundFile) {
             loadedCounter++;
             const  tracksInPlaylist = playbackData[pieceIndex].playList[playbackData.currentPlaylist].tracks.length;
             console.log("Local onload -  loaded", soundFile, loadedCounter, tracksInPlaylist );
-            if (loadedCounter==tracksInPlaylist) {
+            if (loadedCounter===tracksInPlaylist) {
                 setLoaded(true);
                 if (requirePlayback) {
                     requirePlayback = false;
