@@ -76,6 +76,7 @@ endin
 
 ; score lines generated with csoundScore() in above.js
 
+x
 ; Vibraphone + Clarinet
 i "Player" 0 1 "../tracks/Above_VIBR 1 VC 1-St.mp3" 0 -0.4
 i "Player" 0 1 "../tracks/Above_Clar 1 VC 2-St.mp3" -10 0
@@ -84,8 +85,9 @@ i "Player" 0 1 "../tracks/Above_VIBR 3 VC 4-St.mp3" 0 0.4
 i "Player" 0 1 "../tracks/Above_VIBR 4 VC 5-St.mp3" 0 0.4
 i "Player" 0 1 "../tracks/Above_Clar 4 VC 6-St.mp3" -10 0
 i "Out" 0 [7*60+56] 1
-s 
-
+s
+ 
+x
 ; Full Ensemble 1
 i "Player" 0 1 "../tracks/Above_VLN 1 VC 1-St.mp3" -10 -0.44
 i "Player" 0 1 "../tracks/Above_Clar 1 VC 2-St.mp3" 0 0
@@ -95,7 +97,7 @@ i "Player" 0 1 "../tracks/Above_VLN 4 VC 5-St.mp3" -15 -0.34
 i "Player" 0 1 "../tracks/Above_Synth 3 VC 6-St.mp3" -5 0.34
 i "Out" 0 [7*60+56] 2
 s 
-e
+
 
 ; Wind
 i "Player" 0 1 "../tracks/Above_FL 1 VC 1-St.mp3" -5 0
@@ -219,6 +221,8 @@ s
 
 </CsScore>
 </CsoundSynthesizer>
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
