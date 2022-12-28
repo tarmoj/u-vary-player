@@ -481,6 +481,23 @@ function setVersionAndCount() {
 const  jump= () => lightAudio ? audio.currentTime = 465 :  Tone.Transport.seconds=465;
 
 
+// helper function to produce Csound score for csound/renderFiles.csd
+function csoundScore() {
+    if (!playbackData) return;
+    let scoreLines = ""
+    let listCounter = 1;
+    for (let playList of playbackData[pieceIndex].playList) {
+        scoreLines += "\n; " + playList.name + "\n";
+        for (let track of playList.tracks) {
+            scoreLines += `i "Player" 0 1 "../tracks/${getSoundfile(track.name)}" ${track.volume} ${track.pan}\n`;
+        }
+        scoreLines += `i "Out" 0 [7*60+56] ${listCounter++}\ns \n`;
+
+
+    }
+    console.log(scoreLines);
+}
+
 let showVolume = false;
 
 window.onload = () => {
