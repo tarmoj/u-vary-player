@@ -11,3 +11,5 @@ pointofview/csound/hrtf-44100-*
 pointofview/csound/fileCounter
 
 TODO-tarmo
+
+*.wav
