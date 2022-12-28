@@ -238,8 +238,7 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 const lastTimeReaction = () => {
     console.log("This was the last available version. Now you can choose whichever you want");
     hasListenedAll = true;
-    document.querySelector("#menuDiv").style.visibility="visible"
-
+    document.querySelector("#menuDiv").style.display= 'block';
 }
 
 const start = () => {
