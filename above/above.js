@@ -4,19 +4,20 @@
 
 
 // similar to object's properties
-let playbackData = null, pieceInfo = null, reverb=null;
+let playbackData = null, pieceInfo = null, reverb=null, gainNode=null;
 let hasListenedAll = false; // TODO: get from localStorage or similar
-let counter=0, loadedCounter=0, timerID=0, time = 0;
+let counter=0, loadedCounter=0, timerID=0, time = 0, progress = 0;
 let audioResumed = false;
+let requirePlayback = false; // for starting playback after one version has ended and new will be loaded
 const pieceIndex = 0; // peceIndex is necessary if there are several pieces. Leftover from layer-player first version
+const requiredListens = 6; // UPDATE, if necessary
 
 
 
 async function resumeAudio() {
-    await Tone.getContext().resume();
+    await Tone.context.resume(); //newer syntax: Tone.getContext().resume();
     console.log("Audio resume");
     audioResumed = true;
-    //preparePlayback(pieceIndex, counter);
 }
 
 function init() {
@@ -25,16 +26,43 @@ function init() {
     // how many times listened?
     counter = getStoredCounter(playbackData[pieceIndex].uid);
     console.log("Found counter for ", counter, playbackData[pieceIndex].uid);
-    if (counter === playbackData[pieceIndex].playList.length-1) {
+    if (counter >=  requiredListens ) {
         lastTimeReaction();
     }
 
-    reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).toDestination();
+    const volume = parseFloat(document.querySelector("#volumeSlider").value);
+    gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toMaster(); // ver 14: toDestination(); //
+    reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
     preparePlayback(0, counter); // load tracks, dispose old etc
 
     // UI operations
     createMenu();
-    document.querySelector("#counterSpan").innerHTML = (counter+1).toString();
+
+    const loadingProgress = document.querySelector("#loadingProgress")
+    const playbackProgress = document.querySelector("#playbackProgress")
+    const time = document.querySelector("#time")
+
+    document.querySelector("#counterSpan").innerHTML = (counter).toString();
+   
+    pauseButton.style.display = "none";
+    stopButton.style.opacity = 0.2;
+    playbackProgress.style.display = "none";
+
+    // TODO: 
+    // here one example of load progress works with Tone.js r13 but not r14
+    Tone.Buffer.on("progress",  (value) => {
+        progress = Math.round(value * 100);
+        time.innerHTML = "Loading... " + progress + "%";
+        loadingProgress.value = progress;
+        if (progress === 100) {
+            loadingProgress.style.display = 'none';
+            playbackProgress.style.display = 'block';
+            time.innerHTML = '00:00'
+        }
+    });
+
+
+
 }
 
 
@@ -84,6 +112,10 @@ function createPlayer(soundFile) {
             console.log("Local onload -  loaded", soundFile, loadedCounter, tracksInPlaylist );
             if (loadedCounter==tracksInPlaylist) {
                 setLoaded(true);
+                if (requirePlayback) {
+                    requirePlayback = false;
+                    start();
+                }
             }
 
         }
@@ -104,27 +136,76 @@ function getSoundfile(name, piece=pieceIndex) {
 }
 
 const dispose = (pieceIndex=0, playListIndex=0) => {
-    // release old tracks
-    for (let set of playbackData[pieceIndex].playList) {
-        if (set) {
-            for (let track of set.tracks) {
-                if (track.hasOwnProperty("channel")) {
-                    console.log("Trying to dispose: ", track.name);
-                    if (track.channel) track.channel.dispose();
-                    if (track.player) track.player.dispose();
+    console.log("Dispose playlist, trakcs: ", playListIndex, playbackData[pieceIndex].playList[playListIndex].tracks);
+    if (playbackData[pieceIndex].playList[playListIndex]) {
+        for (let track of playbackData[pieceIndex].playList[playListIndex].tracks) {
+            if (track.hasOwnProperty("channel") && track.channel && track.player) {
+                console.log("Trying to dispose: ", track.name, track.channel);
+
+                if (track.channel) {
+                    track.channel.dispose(); // this is not enough, it seems
+                    track.channel = null; // probably wrong thing to do
+                }
+                if (track.player) {
+                    track.player.unsync(); // for any case
+                    track.player.dispose();
+                    track.player = null;
                 }
             }
         }
     }
 }
 
+function getRandomElementFromArray(array) {  // perhaps move to util? if needed somewhre else...
+    return array[Math.floor(Math.random() * array.length)];
+};
+
+function createRandomPlaylist(voices=6) { // creates and adds a random playlist for given number of voices
+    let newPlaylist = { "name":"Random", "tracks":[]};
+    // given that the tracks' number does not change and they are organised by voices! Otherwise filter by voice number in the name of track
+    let tracksByVoices = [
+        playbackData[pieceIndex].tracks.slice(0,5),
+        playbackData[pieceIndex].tracks.slice(5,8),
+        playbackData[pieceIndex].tracks.slice(8,12),
+        playbackData[pieceIndex].tracks.slice(12,17),
+        playbackData[pieceIndex].tracks.slice(17,23),
+        playbackData[pieceIndex].tracks.slice(23)
+    ];
+    console.log(tracksByVoices);
+    if (voices===6) {
+        let possiblePans = [-0.4, -0.2, -0.1, 0.1, 0.2, 0.4 ];
+        // shuffle array:
+        possiblePans.sort(() => Math.random() - 0.5);
+
+        // volume with slight random -12..-3
+        for (let i=0; i<6; i++) {
+            const volume = -12 + Math.random()*9;
+            const pan = possiblePans[i];
+            console.log("Vol, pan: ", volume, pan);
+            const track = getRandomElementFromArray(tracksByVoices[i]);
+            console.log("Picked Track:", track);
+            const newTrack = { name:track.name, pan: pan, volume: volume };
+            newPlaylist.tracks.push(newTrack)
+        }
+        // less voices requires other conditions
+    }
+    console.log("Created playlist: ", newPlaylist);
+    return newPlaylist;
+}
+
 const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  later: take it from pieceIndex
     if (!playbackData) return;
     console.log("preparePlayback", pieceIndex, playListIndex);
 
+    if (Tone.Transport.state !==  "stopped") {
+        stop();
+    }
+
     setLoaded(false);
 
     // release memory of old tracks
+    // TODO: bug on disposing Random tracks!
+    console.log("playlist: current, index", playbackData.currentPlaylist, playListIndex)
     if (playbackData.currentPlaylist ) {
         dispose(pieceIndex, playbackData.currentPlaylist); // clear old buffers
     }
@@ -135,6 +216,8 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
         versionName:playbackData[pieceIndex].playList[playListIndex].name,
         versions: playbackData[pieceIndex].playList.length
     };
+
+    setVersionAndCount();
 
     loadedCounter = 0;
 
@@ -154,7 +237,8 @@ const preparePlayback = (pieceIndex=0, playListIndex=0) => { // index to piece  
 
 const lastTimeReaction = () => {
     console.log("This was the last available version. Now you can choose whichever you want");
-    hasListenedAll = true; // TODO: reflect on UI (show message, unhide menu)
+    hasListenedAll = true;
+    document.querySelector("#menuDiv").style.display= 'block';
 }
 
 const start = () => {
@@ -162,41 +246,67 @@ const start = () => {
         resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
     }
     console.log("Start");
-    Tone.Transport.start("+0.1"); // is this necessary? propbaly no, () should do.
+    Tone.Transport.start();
     const id =  Tone.Transport.scheduleRepeat(() => {
         setTime( Math.floor(Tone.Transport.seconds));
         //console.log("Duration: ", pieceInfo.duration);
         if (Tone.Transport.seconds>pieceInfo.duration && Tone.Transport.state==="started") {
             stop();
-            if (!hasListenedAll) {
+
+            if (counter < playbackData[pieceIndex].playList.length) {
                 const newCounter = counter + 1;
-                console.log("Counter now: ", newCounter, counter);
-                if (newCounter < playbackData[pieceIndex].playList.length) {
-                    setStoredCounter(playbackData[pieceIndex].uid, newCounter);
-                    counter = newCounter;
-                    setTimeout(() => {
-                        preparePlayback(pieceIndex, newCounter); // load data for next version automatically
-                    }, 200); // give some time to stop
+                if (newCounter < requiredListens) {
+                    hasListenedAll = false; // this variable probably not necessary any more.
                 } else {
+                    hasListenedAll = true;
                     lastTimeReaction();
-                    console.log("Counter would be out of range: ", counter, playbackData[pieceIndex].playList.length);
                 }
+
+                setStoredCounter(playbackData[pieceIndex].uid, newCounter);
+                counter = newCounter;
+                setTimeout(() => {
+                    preparePlayback(pieceIndex, newCounter); // load data for next version automatically
+                    requirePlayback = true; // singal to play when loaded
+                }, 200); // give some time to stop
+
+            } else {
+                console.log("Counter out of range: ", counter, playbackData[pieceIndex].playList.length);
             }
         }
     }, 1);
     console.log("Created timer: ", id);
     timerID = id;
+
+    const playbackProgress = document.querySelector("#playbackProgress")
+    playbackProgress.max = playbackData[pieceIndex].duration
+
+    // UI operations
+    playButton.style.display = "none";
+    pauseButton.style.display = "block";
+    stopButton.style.opacity = 1;
 }
 
 const pause = () => {
-    Tone.Transport.toggle("+0.01");
+    Tone.Transport.pause();
+    // UI operations
+    playButton.style.display = "block";
+    pauseButton.style.display = "none";
 }
 
 const stop = () => {
     console.log("Stop");
-    Tone.Transport.stop("+0.05");
+    Tone.Transport.stop();
     Tone.Transport.clear(timerID);
     setTime(0);
+    // UI operations
+    playButton.style.display = "block";
+    pauseButton.style.display = "none";
+}
+
+function setVolume(value) {
+    if (gainNode) {
+        gainNode.gain.rampTo(value, 0.05);
+    }
 }
 
 function timestring(time) {
@@ -214,16 +324,17 @@ function timestring(time) {
 function setTime(seconds) {
     time = seconds;
     document.querySelector("#time").innerHTML = timestring(seconds);
+    document.querySelector("#playbackProgress").value = seconds;
 }
 
 function setLoaded(loaded) {
     console.log("Loaded: ", loaded);
     if (!loaded) {
         document.querySelector("#playButton").disabled = true;
-        document.querySelector("#loadingSpan").innerHTML = "Loading ..."
+        document.querySelector("#time").innerHTML = "Loading ..."
     } else {
         document.querySelector("#playButton").disabled = false;
-        document.querySelector("#loadingSpan").innerHTML = "";
+        document.querySelector("#time").innerHTML = "00:00";
     }
 }
 
@@ -235,16 +346,75 @@ function createMenu() {
     for (let i=0; i<playLists.length;i++ ) {
         selectElement.options.add( new Option(playLists[i].name, i.toString()) ); // cut off .mp3 from the text part
     }
+    // add entry for random mix:
+    selectElement.options.add( new Option("Random", "999") ); // leave the last place for randomly generated playlist
     selectElement.addEventListener("change", (event) => {
         const index = parseInt(event.target.value);
         console.log("Selected version with index: ", index);
+        if (event.target.value==="999") {
+            console.log("Random selected");
+            playbackData[pieceIndex].playList[index] = createRandomPlaylist();
+        }
         preparePlayback(pieceIndex, index);
     }, false);
+
+    // Add playlist buttons to a grid
+
+    const versionGrid = document.querySelector("#versionGrid");
+    playLists.forEach((playList, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = playList.name
+        btn.addEventListener("click", () => {
+            console.log("Selected version with index: ", i);
+            preparePlayback(pieceIndex, i);
+            // TODO: For debuggong, remove when select element is removed
+            selectElement.value = i
+        });
+        versionGrid.appendChild(btn);
+      });
+
+    // Add random button to a grid
+
+    const randomBtn = document.createElement("button");
+    randomBtn.textContent = "Random"
+    randomBtn.addEventListener("click", () => {
+        console.log("Random selected");
+        const index = 999
+        playbackData[pieceIndex].playList[index] = createRandomPlaylist();
+        preparePlayback(pieceIndex, index);
+        // TODO: For debuggong, remove when select element is removed
+        selectElement.value = index
+    });
+    versionGrid.appendChild(randomBtn);
+
 }
+
+function setVersionAndCount() {
+    document.querySelector("#counterSpan").innerHTML = (counter).toString();
+    document.querySelector("#versionSpan").innerHTML = pieceInfo.versionName;
+}
+
+// just for testing (to jump to the end):
+const  jump= () => Tone.Transport.seconds=465;
+
+
+let showVolume = false;
 
 window.onload = () => {
     console.log("Start here");
     loadTracksJson();
+
+    const volumeSlider = document.querySelector("#volumeSlider");
+    const volumeToggle = document.querySelector("#volumeToggle");
+
+    volumeSlider.addEventListener("input", (event)=> setVolume( parseFloat(event.target.value)));
+
+    volumeSlider.style.opacity = 0;
+
+    volumeToggle.addEventListener("click", () => {
+        showVolume = !showVolume;
+        volumeSlider.style.opacity = showVolume ? 1 : 0;
+      });
     // createMenu(); // call it after fetch
 
 }

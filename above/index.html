@@ -1,32 +1,118 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>U: Vary-player: Elis Hallik -  Above</title>
-    <link rel="stylesheet" href="../uvp.css">
-    <script src="https://unpkg.com/tone"></script>
-    <script src="above.js"></script>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>U: Player: Elis Hallik - Above</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <!--    Tone v 13 necessary for Buffer.on("progress")-->
+    <script src="https://unpkg.com/tone@13.8.34"></script>
+    <script src="./above.js"></script>
   </head>
   <body>
-    <h1>U: Vary-player: Elis Hallik -  Above</h1>
-
-    <div id="controls">
-      <button id="playButton" onclick="start()">Play</button>
-      <button id="pauseButton" onclick="pause()">Pause</button>
-      <button id="stopButton" onclick="stop()">Stop</button>
-      <span id="time">00:00</span>
-    </div>
-    <div id="infoDiv">You are listening to the piece for <span id="counterSpan">Nth</span>. time.</div>
-    <div id="selectionDiv">
+    <nav class="Nav">
+      <a href="../">
+        <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      </a>
+      <div class="Volume">
+        <input
+          id="volumeSlider"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.6"
+        />
+        <button id="volumeToggle">
+          <img src="https://api.iconify.design/system-uicons:volume-0.svg" />
+        </button>
+      </div>
+    </nav>
+    <img src="../images/elis.png" class="Background" />
+    <div class="Content">
+      <div class="Title">
+        <div>
+          <h2>Elis Hallik</h2>
+          <h3>Above</h3>
+        </div>
+      </div>
+      <div id="controls" class="Content">
+        <button id="playButton" onclick="start()" class="PlayPause">
+          <img src="https://api.iconify.design/cil:media-play.svg" />
+        </button>
+        <button
+          id="pauseButton"
+          class="PlayPause"
+          id="pauseButton"
+          onclick="pause()"
+        >
+          <img src="https://api.iconify.design/cil:media-pause.svg" />
+        </button>
+        <div id="stopButton" class="Stop" onclick="stop()">
+          <img src="https://api.iconify.design/cil:media-stop.svg" />
+        </div>
+      </div>
+      <div id="time">00:00</div>
+      <progress
+        id="loadingProgress"
+        max="100"
+        step="any"
+        style="--accent: #777"
+      ></progress>
+      <progress id="playbackProgress" step="any"></progress>
+      <div id="infoDiv">
+        <small>
+          <div class="text">
+            There are several versions of this piece. After listening to the
+            whole track without stopping, you get to hear the next version.
+          </div>
+          <div class="text">
+            After listening to 6 versions compiled by the author, a menu opens
+            and you can pick any version from the list or create a random mix.
+          </div>
+        </small>
+        <br />
+        <div>
+          You have listened to the entire piece
+          <span id="counterSpan">N</span> times. Version:
+          <span id="versionSpan"></span>
+        </div>
+      </div>
       <p>
-        Later: this menu will be shown after listening to the piece for X (2?) times. Shown for testing now.
+        <small
+          ><i>
+            For testing (temporary):
+            <button
+              onclick='document.querySelector("#menuDiv").style.display="block"'
+            >
+              Show menu
+            </button>
+          </i></small
+        >
       </p>
-      <select id="versionSelect"></select>
-      <span id="loadingSpan"></span>
+      <div id="menuDiv" style="display: none">
+        <div>
+          <b>You have listened to all required versions. Thank you!</b><br />
+          Now you can select the version you want to hear from the menu below or
+          create a new random mix:
+        </div>
+        <select id="versionSelect" hidden></select>
+        <div class="Grid" id="versionGrid"></div>
+      </div>
+      <br /><br />
+      <p class="text">
+        Above could mean here something like - over, on high; overhead: the
+        clouds above, in heaven; heavenward, in or to a higher place than; over,
+        higher up, upwards. Based on material I developed in 2011-2012. The
+        score consists of 6 “voices” and is for 2 or more instruments covering a
+        certain pitch range. After testing different combinations, 6
+        combinations were chosen for presentation in the web environment.
+      </p>
+      <br /><br />
     </div>
-    <br>
-    <a href="javascript:history.back()">Back</a>
-
   </body>
 </html>
+<

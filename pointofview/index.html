@@ -1,108 +1,70 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <title>U: Vary-player: Age Veeroos -  Vaatenurk (Point of View)</title>
-    <link rel="stylesheet" href="../uvp.css">
-
-    <script>
-
-      let audio = null, currentPart = 1;
-
-      function getRandomSource(part) { // pick a random soundfile from folder for the part1 or part 2
-        // ...
-      }
-
-      function showDialog(open) {
-        document.querySelector("#dialogDiv").style.visibility = open ? "visible" : "hidden" ;
-      }
-
-      // same in above.js -  move to utils?
-      function setLoaded(loaded) {
-        console.log("Loaded: ", loaded);
-        if (!loaded) {
-          document.querySelector("#playButton").disabled = true;
-          document.querySelector("#loadingSpan").innerHTML = "Loading ..."
-        } else {
-          document.querySelector("#playButton").disabled = false;
-          document.querySelector("#loadingSpan").innerHTML = "";
-        }
-      }
-
-      function reaction(yes) {
-        // if yes, start second audio
-        console.log("Yes? ", yes)
-        if (yes) {
-          setLoaded(false);
-          audio.src = "sounds/vaatenurk-II-demo.mp3"; // getRandomSource later
-          currentPart = 2;
-          start();
-        } else {
-          // TODO: some kind or response
-        }
-        showDialog(false);
-      }
-
-      function start() {
-        if (audio) audio.play();
-      }
-
-      function pause() {
-        if (audio) audio.pause();
-      }
-
-      function stop() {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-        // TODO: if stopped in part II goes back to part 1 ?
-      }
-
-      // TODO: evey time "Play" is pressed, pick a new version (audio.src="" probably)
-
-      window.onload = () => {
-        audio = document.querySelector("#audio1");
-        audio.onended = () => {
-          if (currentPart==1)  {
-            showDialog(true);
-          } else {
-            console.log("2. part ended");
-            // do something. load new audio for part 1 ? currentPart = 1
-          }
-        }
-        showDialog(false);
-        setLoaded(false);
-        currentPart = 1;
-      }
-
-    </script>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>U: Player: Age Veeroos - Vaatenurk (Point of View)</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../utils.js"></script>
   </head>
   <body>
-    <h1>U: Vary-Player: Age Veeroos -  Vaatenurk</h1>
-    <p><i>Initial try-out</i></p>
+    <img src="../images/age.png" class="Background" />
+    <nav class="Nav">
+      <a href="../">
+        <img src="https://api.iconify.design/cil:arrow-circle-left.svg" />
+      </a>
+      <div class="Volume">
+        <input id="volume" type="range" max="1" step="any" style="opacity: 0" />
+        <button id="volumetoggle">
+          <img src="https://api.iconify.design/system-uicons:volume-0.svg" />
+        </button>
+      </div>
+    </nav>
+    <div class="Content">
+      <div class="Title">
+        <div>
+          <h2>Age Veeroos</h2>
+          <h3>Point of View</h3>
+        </div>
+      </div>
 
-    <audio id="audio1" src="sounds/vaatenurk-I-demo.mp3"
-           oncanplaythrough='setLoaded(true)' ></audio>
+      <audio id="audio"></audio>
 
-<!--    Maybe rather use reusable code (similar in Above) like createControlRow() -->
-    <div id="controls">
-      <button id="playButton" onclick="start()">Play</button>
-      <button id="pauseButton" onclick="pause()">Pause</button>
-      <button id="stopButton" onclick="stop()">Stop</button>
-<!--      <span id="time">00:00</span>-->
-      --- progress --- |  --- volumeSlider ---
-      <br>
-      <span id="loadingSpan"></span>
+      <button id="playButton" class="PlayPause">
+        <img src="https://api.iconify.design/cil:media-play.svg" />
+      </button>
+
+      <button id="pauseButton" class="PlayPause">
+        <img src="https://api.iconify.design/cil:media-pause.svg" />
+      </button>
+
+      <div id="stopButton" class="Stop">
+        <img src="https://api.iconify.design/cil:media-stop.svg" />
+      </div>
+
+      <progress id="progress" value="0" step="any"></progress>
+
+      <div id="timestamp"></div>
+
+      <div id="current"></div>
+
+      <p class="text">
+        "Vaaternurk" ("The Point of View") deals symbolically with topic
+        individual – group. Individually (solo) one’s point of view is presented
+        straightforwardly and clearly, sometimes with excessive eagerness and
+        conviction. In a group (ensemble) qualities like flexibility and working
+        towards a common goal become more important. Since the individualism is
+        mostly more dominant than mutual support in our society, keeping a
+        common goal will not go so easily and the focus fades. The composition
+        is meant for both live performance and the U:Player app. In both cases
+        the element of space and random choices play an important role.
+      </p>
+
+      <br /><br />
     </div>
-    <div id="dialogDiv" style="visibility: hidden">
-      This was the first part.<br>
-      Are you sure you want to continue listening?<br>
-      <button onclick="reaction(true)">Yes</button> <button onclick="reaction(false)">No</button>
-    </div>
-
-    <br>
-    <a href="javascript:history.back()">Back</a>
-
+    <script src="./pointofview.js"></script>
   </body>
 </html>
