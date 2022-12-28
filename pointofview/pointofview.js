@@ -103,7 +103,7 @@ audio.addEventListener("canplay", () => {
   }
   isLoaded = true;
   timestamp.innerHTML = "00:00";
-  current.innerHTML = `Part ${currentPart}.  <small><i>Fort testing: version ${currentVersion} </i></small>`;
+  current.innerHTML = `Part ${currentPart}  <span hidden><small><i>Fort testing: version ${currentVersion} </i></small></span>`;
 });
 
 audio.addEventListener("loadedmetadata", () => {
