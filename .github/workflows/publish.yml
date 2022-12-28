@@ -19,4 +19,4 @@ jobs:
           server: "uuu.ee" # Edit this
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # Add this to secrets
           local_path: "./*"
-          remote_path: "/home/v2404/public_html/varyplayer" # Edit this
+          remote_path: "/home/v2404/public_html/player" # Edit this
