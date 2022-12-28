@@ -37,13 +37,26 @@ function init() {
     if ( lightAudio) {
         audio = new Audio();
         audio.oncanplay = () => {
+            console.log("Can play");
             setLoaded(true);
             if (requirePlayback) {
                 requirePlayback = false;
                 start(); // maybe start and play have to be different as in pointofview
             }
-            console.log("Loaded");
+            loadingProgress.style.display = 'none'; // show playbackprogress
+            playbackProgress.style.display = 'block';
+            time.innerHTML = '00:00'
         }
+        audio.addEventListener("loadedmetadata", () => {
+            console.log("Load metadata, new duration: ", audio.duration, pieceInfo.duration);
+            playbackProgress.max = audio.duration;
+        });
+
+        audio.addEventListener("timeupdate", () => {
+            playbackProgress.value = audio.currentTime;
+        });
+
+        // audio.ended? probably not, timerFunction takes care of that.
     } else { // TONE
         gainNode = new Tone.Gain({minValue:0, maxValue:1, gain: volume || 0.6}).toMaster(); // ver 14: toDestination(); //
         reverb = new  Tone.Reverb( {decay:2.5, wet:0.05} ).connect(gainNode);
@@ -271,6 +284,38 @@ const lastTimeReaction = () => {
 
 }
 
+const isPlaying = () => lightAudio ? !audio.paused : Tone.Transport.state==="started";
+
+
+const timerFunction = () => {
+    const time = lightAudio ? audio.currentTime : Tone.Transport.seconds;
+    setTime( Math.floor(time));
+    //console.log("Duration: ", pieceInfo.duration);
+    if (time>pieceInfo.duration && isPlaying()) {
+        stop();
+
+        if (counter < playbackData[pieceIndex].playList.length) {
+            const newCounter = counter + 1;
+            if (newCounter < requiredListens) {
+                hasListenedAll = false; // this variable probably not necessary any more.
+            } else {
+                hasListenedAll = true;
+                lastTimeReaction();
+            }
+
+            setStoredCounter(playbackData[pieceIndex].uid, newCounter);
+            counter = newCounter;
+            setTimeout(() => {
+                preparePlayback(pieceIndex, newCounter); // load data for next version automatically
+                requirePlayback = true; // singal to play when loaded
+            }, 200); // give some time to stop
+
+        } else {
+            console.log("Counter out of range: ", counter, playbackData[pieceIndex].playList.length);
+        }
+    }
+}
+
 const start = () => {
     if (!audioResumed) {
         resumeAudio().then( ()=> audioResumed=true  ); // to resume audio on Chrome and similar
@@ -281,37 +326,13 @@ const start = () => {
             audio.play();
         } else {
             requirePlayback = true;
+            return;
         }
+        timerID = setInterval(timerFunction, 1000);
         // need several conditions and a timer here too
     } else {
         Tone.Transport.start();
-        const id =  Tone.Transport.scheduleRepeat(() => {
-            setTime( Math.floor(Tone.Transport.seconds));
-            //console.log("Duration: ", pieceInfo.duration);
-            if (Tone.Transport.seconds>pieceInfo.duration && Tone.Transport.state==="started") {
-                stop();
-
-                if (counter < playbackData[pieceIndex].playList.length) {
-                    const newCounter = counter + 1;
-                    if (newCounter < requiredListens) {
-                        hasListenedAll = false; // this variable probably not necessary any more.
-                    } else {
-                        hasListenedAll = true;
-                        lastTimeReaction();
-                    }
-
-                    setStoredCounter(playbackData[pieceIndex].uid, newCounter);
-                    counter = newCounter;
-                    setTimeout(() => {
-                        preparePlayback(pieceIndex, newCounter); // load data for next version automatically
-                        requirePlayback = true; // singal to play when loaded
-                    }, 200); // give some time to stop
-
-                } else {
-                    console.log("Counter out of range: ", counter, playbackData[pieceIndex].playList.length);
-                }
-            }
-        }, 1);
+        const id =  Tone.Transport.scheduleRepeat(timerFunction, 1);
         console.log("Created timer: ", id);
         timerID = id;
     }
@@ -449,7 +470,7 @@ function setVersionAndCount() {
 }
 
 // just for testing (to jump to the end):
-const  jump= () => Tone.Transport.seconds=465;
+const  jump= () => lightAudio ? audio.currentTime = 465 :  Tone.Transport.seconds=465;
 
 
 let showVolume = false;
