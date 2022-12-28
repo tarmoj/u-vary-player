@@ -24,7 +24,7 @@ async function resumeAudio() {
 }
 
 function initAudio() {
-
+    //fill with audio specific stuff for lightAudio change
 }
 
 function init() {
@@ -74,6 +74,9 @@ function init() {
     const playbackProgress = document.querySelector("#playbackProgress")
     const time = document.querySelector("#time")
 
+    const lightAudioCheckbox = document.querySelector("#lightAudioCheckbox");
+    lightAudioCheckbox.onchange = (event) => useLightAudio(event.target.checked);
+
     document.querySelector("#counterSpan").innerHTML = (counter).toString();
    
     pauseButton.style.display = "none";
@@ -96,6 +99,7 @@ function init() {
 }
 
 function useLightAudio(light) {
+    if (isPlaying()) stop();
     lightAudio = light;
     init(); // this is not right, it should deal only with audio part. figure out about globals/locals like volume && progresses etc
 }
