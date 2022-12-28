@@ -434,6 +434,10 @@ function createMenu() {
         const index = parseInt(event.target.value);
         console.log("Selected version with index: ", index);
         if (event.target.value==="999") {
+            if (lightAudio) {
+                alert("Random mix not enabled in light audio mode");
+                return;
+            }
             console.log("Random selected");
             playbackData[pieceIndex].playList[index] = createRandomPlaylist();
         }
@@ -448,9 +452,13 @@ function createMenu() {
         btn.textContent = playList.name
         btn.addEventListener("click", () => {
             console.log("Selected version with index: ", i);
+            if (isPlaying()) {
+                requirePlayback = true;
+            }
             preparePlayback(pieceIndex, i);
             // TODO: For debuggong, remove when select element is removed
-            selectElement.value = i
+            selectElement.value = i;
+
         });
         versionGrid.appendChild(btn);
       });
