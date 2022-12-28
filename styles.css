@@ -134,9 +134,9 @@ progress::-webkit-progress-value {
 /* Frontpage */
 
 .FrontpageHeader {
-  padding: 32px;
+  padding: 32px 32px 96px 32px;
   display: grid;
-  grid-template-columns: auto 1fr 3fr;
+  grid-template-columns: auto 1fr 1fr 1fr;
   gap: 62px;
 }
 @media (max-width: 1200px) {
@@ -148,7 +148,7 @@ progress::-webkit-progress-value {
 }
 .FrontpageHeader > div:nth-child(1) {
   font-weight: 800;
-  font-size: 64px;
+  font-size: 56px;
 }
 .FrontpageHeader .text {
   font-size: 20px !important;
@@ -234,7 +234,7 @@ progress::-webkit-progress-value {
 }
 .FrontpageFooter {
   border-top: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 256px 32px 32px 32px;
+  padding: 128px 32px 32px 32px;
   line-height: 150%;
   opacity: 0.4;
 }
