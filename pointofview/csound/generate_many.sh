@@ -1,1 +1,1 @@
-for i in {1..5} ; do ./generate.py  ;   done
+for i in {1..10} ; do ./generate.py  ;   done
