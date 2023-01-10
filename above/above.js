@@ -428,30 +428,13 @@ function setLoaded(loaded) {
 function createMenu() {
     if (!playbackData) return;
 
-    const selectElement = document.querySelector("#versionSelect");
     const playLists = playbackData[pieceIndex].playList;
-    for (let i=0; i<playLists.length;i++ ) {
-        selectElement.options.add( new Option(playLists[i].name, i.toString()) ); // cut off .mp3 from the text part
-    }
-    // add entry for random mix:
-    selectElement.options.add( new Option("Random", "999") ); // leave the last place for randomly generated playlist
-    selectElement.addEventListener("change", (event) => {
-        const index = parseInt(event.target.value);
-        console.log("Selected version with index: ", index);
-        if (event.target.value==="999") {
-            if (lightAudio) {
-                alert("Random mix not enabled in light audio mode");
-                return;
-            }
-            console.log("Random selected");
-            playbackData[pieceIndex].playList[index] = createRandomPlaylist();
-        }
-        preparePlayback(pieceIndex, index);
-    }, false);
-
-    // Add playlist buttons to a grid
-
     const versionGrid = document.querySelector("#versionGrid");
+
+    while (versionGrid.lastChild) { // if was populated before, clear.
+        versionGrid.removeChild(versionGrid.lastChild);
+    }
+
     playLists.forEach((playList, i) => {
         const btn = document.createElement("button");
         btn.textContent = playList.name
@@ -461,26 +444,25 @@ function createMenu() {
                 requirePlayback = true;
             }
             preparePlayback(pieceIndex, i);
-            // TODO: For debuggong, remove when select element is removed
-            selectElement.value = i;
+            //selectElement.value = i;
 
         });
         versionGrid.appendChild(btn);
       });
 
     // Add random button to a grid
-
-    const randomBtn = document.createElement("button");
-    randomBtn.textContent = "Random"
-    randomBtn.addEventListener("click", () => {
-        console.log("Random selected");
-        const index = 999
-        playbackData[pieceIndex].playList[index] = createRandomPlaylist();
-        preparePlayback(pieceIndex, index);
-        // TODO: For debuggong, remove when select element is removed
-        selectElement.value = index
-    });
-    versionGrid.appendChild(randomBtn);
+    if (!lightAudio) {
+        const randomBtn = document.createElement("button");
+        randomBtn.textContent = "Random";
+        randomBtn.addEventListener("click", () => {
+            console.log("Random selected");
+            const index = 999
+            playbackData[pieceIndex].playList[index] = createRandomPlaylist();
+            preparePlayback(pieceIndex, index);
+            //selectElement.value = index
+        });
+        versionGrid.appendChild(randomBtn);
+    }
 
 }
 
